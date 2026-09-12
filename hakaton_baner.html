@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хакатон - Tower Defence Game</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0d1117;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 0;
+            overflow: hidden;
+            width: 100vw;
+        }
+        
+        .banner {
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+        
+        .header {
+            background-color: #0d1117;
+            padding: 10px 20px;
+            text-align: center;
+            border-bottom: 3px solid #f78166;
+            flex-shrink: 0;
+            border: 1px solid #30363d;
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .header h1 {
+            color: #f0f6fc;
+            font-size: 1.6rem;
+            margin-bottom: 3px;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+        
+        .header h2 {
+            color: #f78166;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .main-content {
+            display: flex;
+            flex: 1;
+            gap: 10px;
+            min-height: 0;
+            overflow: hidden;
+        }
+        
+        .assignment {
+            flex: 1;
+            background-color: rgba(22, 27, 34, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #30363d;
+            min-width: 0;
+        }
+        
+        .assignment h3 {
+            color: #58a6ff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f78166;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .assignment h3 i {
+            color: #58a6ff;
+            font-size: 1.1rem;
+        }
+        
+        .requirements {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            overflow: hidden;
+        }
+        
+        .requirement-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 8px;
+            border-radius: 6px;
+            background-color: #161b22;
+            transition: all 0.2s;
+            border: 1px solid #30363d;
+            min-height: 70px;
+            flex-shrink: 0;
+        }
+        
+        .requirement-item:hover {
+            transform: translateX(2px);
+            background-color: #1c2128;
+            border-color: #58a6ff;
+        }
+        
+        .requirement-item i {
+            color: #58a6ff;
+            margin-right: 8px;
+            margin-top: 2px;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
+        }
+        
+        .requirement-text {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .requirement-text h4 {
+            color: #c9d1d9;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+        }
+        
+        .requirement-text p {
+            color: #8b949e;
+            line-height: 1.3;
+            font-size: 0.8rem;
+        }
+        
+        .requirements .code {
+            font-family: 'Courier New', monospace;
+            background-color: #0d1117;
+            padding: 1px 4px;
+            border-radius: 3px;
+            color: #7ee787;
+            font-size: 0.75rem;
+            margin: 0 1px;
+        }
+        
+        .tips-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            min-width: 0;
+        }
+        
+        .tips {
+            background-color: rgba(22, 27, 34, 0.95);
+            border-radius: 10px;
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid #30363d;
+        }
+        
+        .tips h3 {
+            color: #58a6ff;
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #7ee787;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .tips h3 i {
+            font-size: 1.1rem;
+        }
+        
+        .tips-content {
+            flex: 1;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .tips-content p {
+            color: #c9d1d9;
+            line-height: 1.3;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+        }
+        
+        .tips-content ul {
+            padding-left: 16px;
+            margin-bottom: 10px;
+        }
+        
+        .tips-content li {
+            color: #8b949e;
+            line-height: 1.3;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+        }
+        
+        .rules-box {
+            background-color: rgba(183, 146, 255, 0.1);
+            padding: 10px;
+            border-radius: 8px;
+            border-left: 3px solid #b392ff;
+            margin: 8px 0;
+            flex-shrink: 0;
+        }
+        
+        .rules-box h4 {
+            color: #b392ff;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .rules-box h4 i {
+            color: #b392ff;
+        }
+        
+        .rules-box p {
+            color: #d2a8ff;
+            font-size: 0.8rem;
+            line-height: 1.3;
+            margin-bottom: 8px;
+        }
+        
+        .rules-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background-color: rgba(183, 146, 255, 0.2);
+            color: #d2a8ff;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid rgba(183, 146, 255, 0.3);
+        }
+        
+        .rules-link:hover {
+            background-color: rgba(183, 146, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(183, 146, 255, 0.2);
+        }
+        
+        .rules-link i {
+            font-size: 0.8rem;
+        }
+        
+        .highlight {
+            background-color: rgba(121, 192, 255, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 2px solid #58a6ff;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #c9d1d9;
+        }
+        
+        .teamwork {
+            background-color: rgba(126, 231, 135, 0.1);
+            padding: 8px;
+            border-radius: 6px;
+            border-left: 2px solid #7ee787;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #c9d1d9;
+        }
+        
+        .footer {
+            background-color: #0d1117;
+            padding: 8px 15px;
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.8rem;
+            border-top: 3px solid #f78166;
+            flex-shrink: 0;
+            border: 1px solid #30363d;
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            height: 90px;
+            justify-content: center;
+        }
+        
+        .deadline-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 6px 0;
+        }
+        
+        .deadline-container i {
+            font-size: 1.2rem;
+            color: #f78166;
+        }
+        
+        .deadline-text h4 {
+            color: #c9d1d9;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+        
+        .deadline-text p {
+            color: #7ee787;
+            font-size: 1rem;
+            font-weight: bold;
+        }
+        
+        .github-logo {
+            width: 120px;
+            margin: 0 auto;
+            display: block;
+        }
+        
+        .logo-text {
+            fill: #f0f6fc;
+        }
+        
+        .footer-info {
+            font-size: 0.75rem;
+            color: #8b949e;
+        }
+        
+        /* Гарантируем, что элементы не накладываются */
+        @media (max-width: 1024px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .assignment, .tips {
+                min-height: 300px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .banner {
+                padding: 8px;
+            }
+            
+            .header {
+                padding: 8px 15px;
+                height: 60px;
+                margin-bottom: 8px;
+            }
+            
+            .header h1 {
+                font-size: 1.4rem;
+            }
+            
+            .header h2 {
+                font-size: 0.9rem;
+            }
+            
+            .assignment, .tips {
+                padding: 12px;
+            }
+            
+            .assignment h3, .tips h3 {
+                font-size: 1.2rem;
+                margin-bottom: 8px;
+            }
+            
+            .requirement-item {
+                padding: 6px;
+                min-height: 65px;
+            }
+            
+            .footer {
+                padding: 6px 12px;
+                height: 80px;
+                gap: 6px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .header {
+                padding: 6px 12px;
+                height: 55px;
+            }
+            
+            .header h1 {
+                font-size: 1.2rem;
+            }
+            
+            .header h2 {
+                font-size: 0.8rem;
+            }
+            
+            .assignment h3, .tips h3 {
+                font-size: 1.1rem;
+            }
+            
+            .requirement-text h4 {
+                font-size: 0.85rem;
+            }
+            
+            .requirement-text p {
+                font-size: 0.75rem;
+            }
+            
+            .rules-box {
+                padding: 8px;
+            }
+            
+            .rules-link {
+                padding: 4px 8px;
+                font-size: 0.75rem;
+            }
+            
+            .deadline-text h4 {
+                font-size: 0.85rem;
+            }
+            
+            .deadline-text p {
+                font-size: 0.9rem;
+            }
+            
+            .github-logo {
+                width: 100px;
+            }
+            
+            .footer-info {
+                font-size: 0.7rem;
+            }
+        }
+        
+        /* Фикс для очень маленьких экранов */
+        @media (max-height: 700px) {
+            .header {
+                height: 55px;
+                padding: 6px 15px;
+            }
+            
+            .assignment, .tips {
+                padding: 10px;
+            }
+            
+            .requirement-item {
+                min-height: 60px;
+                padding: 5px;
+            }
+            
+            .footer {
+                height: 75px;
+                padding: 5px 10px;
+            }
+            
+            .rules-box {
+                padding: 6px;
+                margin: 6px 0;
+            }
+        }
+        
+        /* Убираем все возможные скроллы */
+        body, .banner, .main-content, .assignment, .tips, .requirements, .tips-content {
+            overflow: hidden !important;
+        }
+        
+        /* Для очень маленького контента делаем авто-высоту */
+        .requirements, .tips-content {
+            overflow-y: auto !important;
+            max-height: calc(100vh - 200px) !important;
+        }
+        
+        @media (max-height: 600px) {
+            .requirements, .tips-content {
+                max-height: calc(100vh - 180px) !important;
+            }
+        }
+        
+        /* Анимация для новой вставки */
+        @keyframes pulse-purple {
+            0% { box-shadow: 0 0 0 0 rgba(183, 146, 255, 0.4); }
+            70% { box-shadow: 0 0 0 6px rgba(183, 146, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(183, 146, 255, 0); }
+        }
+        
+        .rules-box {
+            animation: pulse-purple 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="header">
+            <h1><i class="fas fa-code-branch"></i> Хакатон - Tower Defence</h1>
+            <h2>Создание игры на HTML/CSS/JavaScript с использованием GitHub</h2>
+        </div>
+        
+        <div class="main-content">
+            <div class="assignment">
+                <h3><i class="fas fa-tasks"></i> Задание</h3>
+                
+                <div class="requirements">
+                    <div class="requirement-item">
+                        <i class="fab fa-github"></i>
+                        <div class="requirement-text">
+                            <h4>Создание проекта на GitHub</h4>
+                            <p>Создайте новый репозиторий на GitHub для игры в жанре Tower Defence. Добавьте файлы <span class="code">index.html</span>, <span class="code">style.css</span>, <span class="code">game.js</span>.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <i class="fas fa-users"></i>
+                        <div class="requirement-text">
+                            <h4>Командная работа</h4>
+                            <p>Работайте в командах по 3-4 человека. Один участник создает основной репозиторий, остальные форкают его и становятся контрибьюторами.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <i class="fas fa-gamepad"></i>
+                        <div class="requirement-text">
+                            <h4>Игровая механика</h4>
+                            <p>Реализуйте базовую механику Tower Defence: путь для врагов, башни для защиты, волны противников, система здоровья и денег.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <i class="fas fa-code"></i>
+                        <div class="requirement-text">
+                            <h4>Технические требования</h4>
+                            <p>Используйте чистый JavaScript для логики игры. CSS для стилизации интерфейса. HTML для структуры игрового поля и элементов управления.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="requirement-item">
+                        <i class="fas fa-history"></i>
+                        <div class="requirement-text">
+                            <h4>Система оценки</h4>
+                            <p>Будет оцениваться как общий результат команды, так и индивидуальный вклад каждого участника через историю коммитов в GitHub.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tips-container">
+                <div class="tips">
+                    <h3><i class="fas fa-lightbulb"></i> Рекомендации</h3>
+                    
+                    <div class="tips-content">
+                        <p><strong>Шаг 1:</strong> Создайте репозиторий на GitHub и добавьте базовую структуру файлов.</p>
+                        
+                        <p><strong>Шаг 2:</strong> Разработайте прототип игрового поля с помощью HTML/CSS.</p>
+                        
+                        <p><strong>Шаг 3:</strong> Реализуйте базовую игровую логику на JavaScript.</p>
+                        
+                        <ul>
+                            <li>Создайте карту с путем для врагов</li>
+                            <li>Добавьте типы башен с разными характеристиками</li>
+                            <li>Реализуйте волновую систему появления врагов</li>
+                            <li>Создайте интерфейс игрока (здоровье, деньги, панель улучшений)</li>
+                        </ul>
+                        
+                        <div class="rules-box">
+                            <h4><i class="fas fa-book"></i> Правила хакатона</h4>
+                            <p>Ознакомьтесь с полными правилами, критериями оценки и требованиями к проекту на странице ментора.</p>
+                            <a href="https://github.com/TopCollegeTCF/Hakaton_knight-s-move_2026" target="_blank" class="rules-link">
+                                <i class="fas fa-external-link-alt"></i>
+                                Открыть правила хакатона
+                            </a>
+                        </div>
+                        
+                        <div class="highlight">
+                            <p><strong>GitHub Workflow:</strong> Используйте Issues для задач, Pull Requests для внесения изменений, Projects для отслеживания прогресса.</p>
+                        </div>
+                        
+                        <div class="teamwork">
+                            <p><strong>Командная работа:</strong> Распределите роли: один отвечает за игровую логику, другой за графику/UI, третий за баланс и тестирование.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <div class="deadline-container">
+                <i class="far fa-calendar-check"></i>
+                <div class="deadline-text">
+                    <h4>Срок хакатона:</h4>
+                    <p>2 недели</p>
+                </div>
+            </div>
+            
+            <svg class="github-logo" viewBox="0 0 150 25">
+                <text x="0" y="20" class="logo-text" font-family="Arial, sans-serif" font-size="22" font-weight="bold">
+                    <tspan fill="#f0f6fc">Git</tspan>
+                    <tspan fill="#8b949e">Hub</tspan>
+                </text>
+            </svg>
+            
+            <div class="footer-info">
+                Хакатон по разработке игр | Командная работа с Git
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Анимация для элементов требований
+            const requirementItems = document.querySelectorAll('.requirement-item');
+            
+            requirementItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-10px)';
+                
+                setTimeout(() => {
+                    item.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                    item.style.opacity = '1';
+                    item.style.transform = 'translateX(0)';
+                }, 100 + index * 80);
+            });
+            
+            // Анимация для подсказок
+            const tipsContent = document.querySelector('.tips-content');
+            tipsContent.style.opacity = '0';
+            
+            setTimeout(() => {
+                tipsContent.style.transition = 'opacity 0.5s ease';
+                tipsContent.style.opacity = '1';
+            }, 500);
+            
+            // Особенная анимация для блока с правилами
+            const rulesBox = document.querySelector('.rules-box');
+            rulesBox.style.opacity = '0';
+            rulesBox.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                rulesBox.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                rulesBox.style.opacity = '1';
+                rulesBox.style.transform = 'scale(1)';
+            }, 800);
+            
+            // Анимация для срока выполнения
+            const deadlineContainer = document.querySelector('.deadline-container');
+            deadlineContainer.style.opacity = '0';
+            
+            setTimeout(() => {
+                deadlineContainer.style.transition = 'opacity 0.4s ease';
+                deadlineContainer.style.opacity = '1';
+            }, 1000);
+            
+            // Эффект мигания для сроков
+            setInterval(() => {
+                deadlineContainer.style.boxShadow = '0 0 10px rgba(247, 129, 102, 0.3)';
+                setTimeout(() => {
+                    deadlineContainer.style.boxShadow = 'none';
+                }, 300);
+            }, 3000);
+            
+            // Интерактивность для ссылки правил
+            const rulesLink = document.querySelector('.rules-link');
+            if (rulesLink) {
+                rulesLink.addEventListener('mouseover', function() {
+                    this.style.transform = 'translateY(-2px) scale(1.05)';
+                });
+                
+                rulesLink.addEventListener('mouseout', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            }
+            
+            // Функция для проверки и адаптации размеров
+            function adjustLayout() {
+                const banner = document.querySelector('.banner');
+                const header = document.querySelector('.header');
+                const footer = document.querySelector('.footer');
+                const mainContent = document.querySelector('.main-content');
+                
+                const windowHeight = window.innerHeight;
+                const headerHeight = header.offsetHeight;
+                const footerHeight = footer.offsetHeight;
+                const paddingTotal = 20; // padding banner (10px * 2)
+                
+                const availableHeight = windowHeight - headerHeight - footerHeight - paddingTotal;
+                
+                // Устанавливаем высоту основного контента
+                if (mainContent) {
+                    mainContent.style.height = availableHeight + 'px';
+                }
+                
+                // Адаптация шрифтов для очень маленьких экранов
+                if (windowHeight < 650) {
+                    const texts = document.querySelectorAll('.requirement-text p, .requirement-text h4, .tips-content p, .tips-content li');
+                    texts.forEach(text => {
+                        const currentSize = parseFloat(window.getComputedStyle(text).fontSize);
+                        if (currentSize > 0.7) {
+                            text.style.fontSize = (currentSize * 0.95) + 'px';
+                        }
+                    });
+                }
+            }
+            
+            // Вызываем при загрузке и изменении размера окна
+            adjustLayout();
+            window.addEventListener('resize', adjustLayout);
+            
+            // Также вызываем после анимаций
+            setTimeout(adjustLayout, 1200);
+        });
+    </script>
+</body>
+</html>
