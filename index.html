@@ -3,52 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nice Game Challenge | Хакатон 2026</title>
-
+<title>NICE GAME CHALLENGE | Хакатон 2026</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-
 <style>
-/* ================= БАЗА ================= */
-*,
-*::before,
-*::after {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+/* ============================================================
+   БАЗА
+============================================================ */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-    --bg-0: #06080c;
-    --bg-1: #0b0f16;
-    --bg-2: #121722;
-    --bg-3: #1a2130;
+    --bg-0: #04050a;
+    --bg-1: #080b12;
+    --bg-2: #0e131c;
+    --bg-3: #161b28;
 
     --accent: #f78166;
-    --accent-2: #ff9c85;
-    --accent-dark: #e56b50;
-
-    --blue: #58a6ff;
-    --green: #7ee787;
+    --blue:   #58a6ff;
+    --cyan:   #22d3ee;
+    --green:  #7ee787;
     --purple: #b392ff;
+    --pink:   #ff7eb6;
     --yellow: #ffd33d;
-    --pink: #ff7eb6;
 
     --text: #f0f6fc;
     --muted: #8b949e;
-    --line: rgba(255, 255, 255, 0.08);
 
     --glass: rgba(255, 255, 255, 0.04);
-    --glass-strong: rgba(255, 255, 255, 0.07);
-    --glass-border: rgba(255, 255, 255, 0.12);
+    --glass-border: rgba(255, 255, 255, 0.10);
 
-    --glow: 0 0 24px rgba(247, 129, 102, 0.45);
-    --glow-strong: 0 0 48px rgba(247, 129, 102, 0.65);
-    --glow-blue: 0 0 40px rgba(88, 166, 255, 0.45);
-    --glow-purple: 0 0 40px rgba(179, 146, 255, 0.45);
-
-    --transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 html { scroll-behavior: smooth; }
@@ -59,92 +45,175 @@ body {
     color: var(--text);
     overflow-x: hidden;
     min-height: 100vh;
-    line-height: 1.5;
+    line-height: 1.55;
     -webkit-font-smoothing: antialiased;
+    cursor: none;
 }
 
-/* ================= ФОН ================= */
-#bg-gradient {
-    position: fixed;
-    inset: 0;
-    z-index: -3;
+/* ============================================================
+   CURSOR
+============================================================ */
+.cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    border-radius: 50%;
+    mix-blend-mode: screen;
+    will-change: transform;
+}
+.cursor-dot {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    box-shadow: 0 0 14px var(--accent), 0 0 28px var(--accent);
+}
+.cursor-ring {
+    width: 40px; height: 40px;
+    border: 1.5px solid rgba(247, 129, 102, 0.7);
+    transition: width 0.3s var(--ease-expo), height 0.3s var(--ease-expo), border-color 0.3s;
+}
+.cursor-ring.hover {
+    width: 70px; height: 70px;
+    border-color: var(--blue);
+    box-shadow: 0 0 30px rgba(88, 166, 255, 0.6), inset 0 0 20px rgba(88, 166, 255, 0.2);
+}
+@media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor-dot, .cursor-ring { display: none; }
+}
+
+/* ============================================================
+   SCROLL PROGRESS
+============================================================ */
+#scroll-progress {
+    position: fixed; top: 0; left: 0;
+    height: 3px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--blue), var(--purple), var(--green), var(--cyan));
+    background-size: 300% 100%;
+    animation: gradientMove 4s linear infinite;
+    z-index: 9999;
+    box-shadow: 0 0 24px rgba(247, 129, 102, 0.8);
+}
+@keyframes gradientMove {
+    0%   { background-position: 0% 50%; }
+    100% { background-position: 300% 50%; }
+}
+
+/* ============================================================
+   ФОН
+============================================================ */
+#bg-aurora {
+    position: fixed; inset: 0; z-index: -6;
     background:
-        radial-gradient(1200px 800px at 12% -10%, rgba(247, 129, 102, 0.16), transparent 60%),
-        radial-gradient(1000px 700px at 88% 15%, rgba(88, 166, 255, 0.16), transparent 60%),
-        radial-gradient(900px 800px at 50% 110%, rgba(179, 146, 255, 0.14), transparent 60%),
-        linear-gradient(180deg, #06080c 0%, #0b0f16 55%, #06080c 100%);
-    animation: bgShift 22s ease-in-out infinite alternate;
+        radial-gradient(900px 700px at 10% 0%, rgba(247, 129, 102, 0.22), transparent 60%),
+        radial-gradient(900px 700px at 90% 10%, rgba(88, 166, 255, 0.22), transparent 60%),
+        radial-gradient(800px 800px at 50% 100%, rgba(179, 146, 255, 0.20), transparent 60%),
+        radial-gradient(700px 500px at 80% 80%, rgba(34, 211, 238, 0.15), transparent 60%),
+        linear-gradient(180deg, #04050a 0%, #080b12 50%, #04050a 100%);
+    animation: auroraShift 24s ease-in-out infinite alternate;
+}
+@keyframes auroraShift {
+    0%   { filter: hue-rotate(0deg)   saturate(1);    transform: scale(1); }
+    100% { filter: hue-rotate(-25deg) saturate(1.35); transform: scale(1.1); }
 }
 
-@keyframes bgShift {
-    0%   { filter: hue-rotate(0deg)   saturate(1); }
-    100% { filter: hue-rotate(-12deg) saturate(1.15); }
+#bg-grid {
+    position: fixed; inset: 0; z-index: -5;
+    background-image:
+        linear-gradient(rgba(88, 166, 255, 0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(88, 166, 255, 0.06) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 40%, #000 30%, transparent 100%);
+    animation: gridPan 40s linear infinite;
+}
+@keyframes gridPan {
+    0%   { background-position: 0 0; }
+    100% { background-position: 64px 64px; }
+}
+
+#bg-noise {
+    position: fixed; inset: 0; z-index: -2;
+    opacity: 0.04;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+}
+
+#bg-vignette {
+    position: fixed; inset: 0; z-index: 1;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.5) 100%);
 }
 
 #particles-js {
-    position: fixed;
-    inset: 0;
-    z-index: -2;
+    position: fixed; inset: 0; z-index: 0;
     pointer-events: none;
 }
 
-/* 3D-канвас хедера */
-#three-header {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    opacity: 0.9;
+/* ============================================================
+   PRELOADER
+============================================================ */
+.preloader {
+    position: fixed; inset: 0;
+    background: radial-gradient(circle at 50% 40%, #080b12 0%, #04050a 80%);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 10000;
+    transition: opacity 0.9s ease, visibility 0.9s ease;
+}
+.preloader.hide { opacity: 0; visibility: hidden; }
+.preloader-content { text-align: center; position: relative; }
+#three-preloader { width: 260px; height: 260px; margin: 0 auto 20px; display: block; }
+.loader-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1rem;
+    color: var(--muted);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    animation: textPulse 1.8s ease-in-out infinite;
+}
+.loader-sub {
+    margin-top: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.75rem;
+    color: var(--accent);
+    letter-spacing: 5px;
+    text-shadow: 0 0 16px var(--accent);
+}
+.loader-bar {
+    width: 280px; height: 3px;
+    background: rgba(255, 255, 255, 0.06);
+    margin: 22px auto 0;
+    border-radius: 2px;
+    overflow: hidden;
+}
+.loader-bar-fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, var(--accent), var(--blue), var(--purple));
+    background-size: 200% 100%;
+    animation: loadBar 2s ease-in-out forwards, gradientMove 2s linear infinite;
+    box-shadow: 0 0 16px var(--accent);
+}
+@keyframes loadBar { to { width: 100%; } }
+@keyframes textPulse {
+    0%, 100% { opacity: 0.7; }
+    50%      { opacity: 1; }
 }
 
+/* ============================================================
+   КОНТЕЙНЕР
+============================================================ */
 .container {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 24px;
     position: relative;
-    z-index: 2;
+    z-index: 10;
 }
 
-/* ================= ПРЕЛОАДЕР ================= */
-.preloader {
-    position: fixed;
-    inset: 0;
-    background: radial-gradient(circle at 50% 40%, #0d1117 0%, #06080c 80%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 9999;
-    transition: opacity 0.7s ease, visibility 0.7s ease;
-}
-.preloader.hide { opacity: 0; visibility: hidden; }
-
-.preloader-content {
-    text-align: center;
-    position: relative;
-}
-#three-preloader {
-    width: 220px;
-    height: 220px;
-    margin: 0 auto 12px;
-    display: block;
-}
-.loader-text {
-    font-size: 1rem;
-    color: var(--muted);
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    animation: textPulse 1.8s ease-in-out infinite;
-}
-.loader-sub {
-    margin-top: 8px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.8rem;
-    color: var(--accent);
-    letter-spacing: 3px;
-    opacity: 0.8;
-}
-
-/* ================= ХЕДЕР ================= */
+/* ============================================================
+   ХЕДЕР
+============================================================ */
 .header {
     min-height: 100vh;
     display: flex;
@@ -157,216 +226,322 @@ body {
     overflow: hidden;
     isolation: isolate;
 }
-
+#three-header {
+    position: absolute; inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.95;
+}
 .header-content {
     z-index: 2;
-    will-change: transform, opacity;
-    max-width: 900px;
+    max-width: 960px;
     padding: 0 16px;
+    will-change: transform, opacity;
+}
+
+.header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 20px;
+    background: rgba(247, 129, 102, 0.1);
+    border: 1px solid rgba(247, 129, 102, 0.4);
+    border-radius: 100px;
+    font-size: 0.78rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 24px;
+    backdrop-filter: blur(12px);
+    animation: badgePulse 2.4s infinite;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+}
+.header-badge i {
+    font-size: 0.55rem;
+    color: var(--accent);
+    animation: heartbeat 1.6s infinite;
+}
+@keyframes badgePulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(247, 129, 102, 0.4); }
+    50%      { box-shadow: 0 0 0 10px rgba(247, 129, 102, 0); }
+}
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.4); }
 }
 
 .logo-container {
     position: relative;
-    width: 170px;
-    height: 170px;
-    margin: 0 auto 26px;
+    width: 190px; height: 190px;
+    margin: 0 auto 30px;
 }
 .logo {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     object-fit: contain;
     position: relative;
     z-index: 3;
-    filter: drop-shadow(0 0 26px rgba(247, 129, 102, 0.55));
+    filter: drop-shadow(0 0 34px rgba(247, 129, 102, 0.65));
     animation: logoFloat 6s ease-in-out infinite;
+    transition: filter 0.4s ease;
 }
 .logo-glow {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 240px;
-    height: 240px;
-    background: radial-gradient(circle, rgba(247, 129, 102, 0.25) 0%, transparent 70%);
+    width: 280px; height: 280px;
+    background: radial-gradient(circle, rgba(247, 129, 102, 0.4) 0%, transparent 70%);
     z-index: 1;
     animation: glowPulse 3s infinite;
 }
 .logo-pulse {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 280px;
-    height: 280px;
-    border: 2px solid rgba(247, 129, 102, 0.28);
+    width: 320px; height: 320px;
+    border: 2px solid rgba(247, 129, 102, 0.3);
     border-radius: 50%;
     z-index: 2;
     animation: pulseRing 2.6s infinite;
 }
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-20px); }
+}
+@keyframes glowPulse {
+    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+    50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.12); }
+}
+@keyframes pulseRing {
+    0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.7; }
+    70%  { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+    100% { transform: translate(-50%, -50%) scale(1.3); opacity: 0; }
+}
 
 .main-title {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(2rem, 6.5vw, 4.4rem);
+    font-size: clamp(2.4rem, 7.5vw, 5.4rem);
     font-weight: 900;
-    margin-bottom: 18px;
+    margin-bottom: 24px;
     text-transform: uppercase;
-    letter-spacing: 3px;
-    line-height: 1.02;
+    letter-spacing: 4px;
+    line-height: 1;
 }
 .title-word {
     display: block;
     opacity: 0;
-    transform: translateY(30px);
-    animation: titleReveal 0.9s forwards;
+    transform: translateY(50px);
+    animation: titleReveal 1.1s var(--ease-expo) forwards;
 }
-.title-word-1 { color: var(--accent); animation-delay: 0.15s; }
-.title-word-2 { color: var(--blue);  animation-delay: 0.35s; }
+.title-word-1 {
+    color: var(--accent);
+    text-shadow: 0 0 40px rgba(247, 129, 102, 0.8), 0 0 80px rgba(247, 129, 102, 0.4);
+    animation-delay: 0.2s;
+}
+.title-word-2 {
+    color: var(--blue);
+    text-shadow: 0 0 40px rgba(88, 166, 255, 0.8), 0 0 80px rgba(88, 166, 255, 0.4);
+    animation-delay: 0.4s;
+}
 .title-word-3 {
-    background: linear-gradient(90deg, var(--green), var(--purple), var(--pink), var(--green));
+    background: linear-gradient(90deg, var(--green), var(--purple), var(--pink), var(--cyan), var(--green));
     background-size: 300% 100%;
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    animation: titleReveal 0.9s forwards 0.55s, gradientMove 6s linear infinite;
+    animation: titleReveal 1.1s var(--ease-expo) forwards 0.6s, gradientMove 5s linear infinite;
+    filter: drop-shadow(0 0 40px rgba(179, 146, 255, 0.7));
 }
+@keyframes titleReveal { to { opacity: 1; transform: translateY(0); } }
 
 .subtitle {
-    font-size: clamp(1rem, 2.2vw, 1.35rem);
+    font-size: clamp(1rem, 2.2vw, 1.4rem);
     color: var(--muted);
-    margin-bottom: 36px;
+    margin-bottom: 44px;
     font-weight: 300;
-    letter-spacing: 0.5px;
+    font-family: 'JetBrains Mono', monospace;
 }
+.subtitle::before { content: '> '; color: var(--accent); }
 
-/* ТАЙМЕР */
+/* COUNTDOWN */
 .countdown {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    gap: 16px;
-    margin: 30px 0 8px;
+    gap: 18px;
+    margin: 38px 0 14px;
 }
 .countdown-item {
-    min-width: 108px;
-    padding: 16px 22px;
-    border-radius: 18px;
-    background: var(--glass);
+    min-width: 118px;
+    padding: 20px 24px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     display: flex;
     flex-direction: column;
     align-items: center;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06);
-    transition: var(--transition);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.5s var(--ease-expo);
     position: relative;
     overflow: hidden;
 }
 .countdown-item::before {
     content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 40%);
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 40%);
     pointer-events: none;
 }
 .countdown-item:hover {
-    transform: translateY(-4px);
-    border-color: rgba(247, 129, 102, 0.45);
-    box-shadow: 0 18px 44px rgba(247, 129, 102, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-8px) scale(1.04);
+    border-color: rgba(247, 129, 102, 0.6);
+    box-shadow: 0 24px 60px rgba(247, 129, 102, 0.4);
 }
 .countdown-number {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    font-size: clamp(1.9rem, 3.4vw, 2.7rem);
     font-weight: 700;
     color: var(--accent);
     line-height: 1;
-    text-shadow: 0 0 20px rgba(247, 129, 102, 0.5);
+    text-shadow: 0 0 28px rgba(247, 129, 102, 0.8);
 }
 .countdown-label {
-    margin-top: 6px;
-    font-size: 0.72rem;
+    margin-top: 10px;
+    font-size: 0.7rem;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 1.8px;
+    letter-spacing: 2.5px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
+/* STATS */
 .header-stats {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 46px;
-    margin-top: 34px;
+    gap: 56px;
+    margin-top: 44px;
 }
-.stat {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-}
+.stat { display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .stat i {
-    font-size: 1.9rem;
+    font-size: 2rem;
     color: var(--accent);
-    filter: drop-shadow(0 0 12px rgba(247, 129, 102, 0.6));
+    filter: drop-shadow(0 0 16px rgba(247, 129, 102, 0.8));
 }
 .stat-number {
-    font-size: clamp(1.8rem, 4vw, 2.6rem);
     font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 4.2vw, 3rem);
     font-weight: 700;
+    background: linear-gradient(135deg, #fff, #8b949e);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 .stat-label {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--muted);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 2.5px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
+/* SCROLL INDICATOR */
 .scroll-indicator {
     position: absolute;
-    bottom: 28px;
-    left: 50%;
+    bottom: 34px; left: 50%;
     transform: translateX(-50%);
     animation: bounce 2.2s infinite;
     cursor: pointer;
     color: var(--accent);
-    font-size: 1.7rem;
+    font-size: 1.6rem;
     z-index: 3;
-    background: var(--glass);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(10px);
-    width: 46px;
-    height: 46px;
+    width: 54px; height: 54px;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: var(--transition);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.5s var(--ease-expo);
 }
 .scroll-indicator:hover {
-    background: rgba(247, 129, 102, 0.15);
-    border-color: rgba(247, 129, 102, 0.5);
-    box-shadow: var(--glow);
+    background: rgba(247, 129, 102, 0.2);
+    border-color: rgba(247, 129, 102, 0.65);
+    box-shadow: 0 0 32px rgba(247, 129, 102, 0.6);
+    transform: translateX(-50%) scale(1.1);
+}
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+    40% { transform: translateX(-50%) translateY(-16px); }
+    60% { transform: translateX(-50%) translateY(-8px); }
 }
 
-/* ================= СЕКЦИИ ================= */
-section { padding: 110px 0; position: relative; }
+/* ============================================================
+   MARQUEE
+============================================================ */
+.marquee {
+    overflow: hidden;
+    border-top: 1px solid var(--glass-border);
+    border-bottom: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(12px);
+    padding: 20px 0;
+    position: relative;
+    z-index: 10;
+}
+.marquee-track {
+    display: flex;
+    gap: 44px;
+    white-space: nowrap;
+    animation: marqueeScroll 34s linear infinite;
+}
+.marquee-track:hover { animation-play-state: paused; }
+.marquee-item {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 44px;
+}
+.marquee-item i {
+    color: var(--accent);
+    font-size: 0.7rem;
+    filter: drop-shadow(0 0 10px rgba(247, 129, 102, 0.9));
+}
+@keyframes marqueeScroll {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
 
+/* ============================================================
+   ★ SECTION (обычная, вертикальная)
+============================================================ */
+.section {
+    padding: 120px 0;
+    position: relative;
+    z-index: 5;
+}
 .section-header {
     text-align: center;
-    margin-bottom: 60px;
+    margin-bottom: 70px;
 }
 .section-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 26px;
-    margin-bottom: 14px;
+    gap: 30px;
+    margin-bottom: 18px;
 }
 .title-text {
     font-family: 'Orbitron', sans-serif;
-    font-size: clamp(1.5rem, 3.5vw, 2.3rem);
+    font-size: clamp(1.8rem, 4.2vw, 2.8rem);
     text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(90deg, var(--text) 0%, var(--accent) 50%, var(--text) 100%);
+    letter-spacing: 4px;
+    background: linear-gradient(90deg, #fff 0%, var(--accent) 50%, #fff 100%);
     background-size: 200% 100%;
     -webkit-background-clip: text;
     background-clip: text;
@@ -375,221 +550,430 @@ section { padding: 110px 0; position: relative; }
 }
 .title-line {
     height: 2px;
-    width: 90px;
+    width: 110px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
 }
 .section-subtitle {
-    font-size: 1.05rem;
+    font-size: 1.08rem;
     color: var(--muted);
+    font-family: 'JetBrains Mono', monospace;
+}
+.section-subtitle::before { content: '// '; color: var(--accent); opacity: 0.6; }
+
+/* ============================================================
+   ★★★ ПОРТАЛ-ПЕРЕХОД ★★★
+   Это главная фишка — секция высотой 200vh, внутри sticky слой
+   Портал "пролетает" при скролле
+============================================================ */
+.portal {
+    position: relative;
+    height: 200vh; /* даём запас для скролла портала */
+    z-index: 6;
 }
 
-/* ================= О ХАКАТОНЕ ================= */
+.portal-sticky {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    isolation: isolate;
+}
+
+/* Внутренний вортек — круги света */
+.portal-vortex {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vh; height: 100vh;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.portal-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    border-radius: 50%;
+    border: 1.5px solid;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    will-change: transform, opacity;
+    pointer-events: none;
+}
+.portal-ring.r1 { width: 220px; height: 220px; border-color: rgba(247, 129, 102, 0.9); box-shadow: 0 0 60px rgba(247, 129, 102, 0.7), inset 0 0 40px rgba(247, 129, 102, 0.4); }
+.portal-ring.r2 { width: 380px; height: 380px; border-color: rgba(88, 166, 255, 0.7);  box-shadow: 0 0 80px rgba(88, 166, 255, 0.5), inset 0 0 60px rgba(88, 166, 255, 0.3); }
+.portal-ring.r3 { width: 560px; height: 560px; border-color: rgba(179, 146, 255, 0.6); box-shadow: 0 0 100px rgba(179, 146, 255, 0.4), inset 0 0 80px rgba(179, 146, 255, 0.2); }
+.portal-ring.r4 { width: 760px; height: 760px; border-color: rgba(126, 231, 135, 0.5); box-shadow: 0 0 120px rgba(126, 231, 135, 0.35); }
+.portal-ring.r5 { width: 980px; height: 980px; border-color: rgba(34, 211, 238, 0.4);  box-shadow: 0 0 140px rgba(34, 211, 238, 0.3); }
+
+/* Горизонтальные светящиеся полосы — создают ощущение движения вбок */
+.portal-streaks {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+}
+.streak {
+    position: absolute;
+    height: 2px;
+    border-radius: 2px;
+    opacity: 0;
+    will-change: transform, opacity;
+    pointer-events: none;
+}
+
+/* Текст портала */
+.portal-text {
+    position: relative;
+    z-index: 5;
+    text-align: center;
+    will-change: transform, opacity, filter;
+    pointer-events: none;
+    user-select: none;
+}
+.portal-text-main {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2.5rem, 8vw, 5.5rem);
+    font-weight: 900;
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--accent), var(--blue), var(--purple), var(--cyan), var(--accent));
+    background-size: 400% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradientMove 4s linear infinite;
+    filter: drop-shadow(0 0 40px rgba(247, 129, 102, 0.9));
+    line-height: 1;
+}
+.portal-text-sub {
+    margin-top: 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: clamp(0.75rem, 1.4vw, 0.95rem);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0.9;
+}
+.portal-text-sub::before { content: '<<< '; color: var(--accent); }
+.portal-text-sub::after  { content: ' >>>'; color: var(--accent); }
+
+/* Заголовок "влетающей" секции — выезжает сбоку */
+.portal-incoming {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    text-align: center;
+    will-change: transform, opacity, filter;
+    pointer-events: none;
+    user-select: none;
+}
+.portal-incoming-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow:
+        0 0 30px rgba(247, 129, 102, 0.8),
+        0 0 60px rgba(247, 129, 102, 0.5);
+}
+.portal-incoming-sub {
+    margin-top: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+
+/* Портальный "центр" — вспышка */
+.portal-flash {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0%, rgba(247, 129, 102, 0.8) 30%, transparent 70%);
+    opacity: 0;
+    z-index: 3;
+    pointer-events: none;
+    will-change: opacity, transform;
+    filter: blur(8px);
+}
+
+/* Вертикальный затемняющий слой, который "разрезает" экран */
+.portal-curtain {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 50%;
+    background: linear-gradient(90deg, transparent, var(--bg-0));
+    z-index: 4;
+    pointer-events: none;
+    will-change: transform;
+    opacity: 0;
+}
+.portal-curtain.left  { left: 0;  transform-origin: left; }
+.portal-curtain.right { right: 0; transform-origin: right; background: linear-gradient(270deg, transparent, var(--bg-0)); }
+
+/* ============================================================
+   О ХАКАТОНЕ
+============================================================ */
 .about-content {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 26px;
-    margin-bottom: 80px;
+    grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+    gap: 30px;
+    margin-bottom: 90px;
 }
 .about-card {
-    background: var(--glass);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-radius: 22px;
-    padding: 38px 30px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(18px);
+    border-radius: 28px;
+    padding: 44px 34px;
     text-align: center;
     border: 1px solid var(--glass-border);
-    transition: var(--transition);
+    transition: all 0.6s var(--ease-expo);
     position: relative;
     overflow: hidden;
+    isolation: isolate;
 }
 .about-card::before {
     content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: conic-gradient(from 0deg, transparent, rgba(247, 129, 102, 0.12), transparent 30%);
+    position: absolute; inset: -1px;
+    border-radius: 28px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(247,129,102,0.6), transparent 40%, transparent 60%, rgba(88,166,255,0.6));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
     opacity: 0;
-    transition: opacity 0.6s ease;
-    animation: rotate 8s linear infinite;
+    transition: opacity 0.5s ease;
+    pointer-events: none;
 }
 .about-card:hover {
-    transform: translateY(-10px);
-    border-color: rgba(247, 129, 102, 0.5);
-    box-shadow: var(--glow-strong), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transform: translateY(-14px);
+    border-color: rgba(247, 129, 102, 0.4);
+    box-shadow: 0 36px 90px rgba(247, 129, 102, 0.3), 0 0 80px rgba(247, 129, 102, 0.18);
 }
 .about-card:hover::before { opacity: 1; }
 
 .about-icon {
-    width: 74px;
-    height: 74px;
-    margin: 0 auto 22px;
-    background: rgba(247, 129, 102, 0.1);
-    border-radius: 50%;
+    width: 86px; height: 86px;
+    margin: 0 auto 26px;
+    background: linear-gradient(135deg, rgba(247, 129, 102, 0.18), rgba(88, 166, 255, 0.18));
+    border-radius: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid var(--accent);
+    border: 1px solid rgba(247, 129, 102, 0.45);
     position: relative;
     z-index: 2;
-    box-shadow: 0 0 24px rgba(247, 129, 102, 0.3);
+    box-shadow: 0 0 36px rgba(247, 129, 102, 0.3);
+    transition: all 0.6s var(--ease-expo);
 }
-.about-icon i { font-size: 1.9rem; color: var(--accent); }
-.about-card h3 { font-size: 1.3rem; margin-bottom: 12px; position: relative; z-index: 2; }
-.about-card p { color: var(--muted); position: relative; z-index: 2; }
+.about-card:hover .about-icon {
+    transform: rotate(-10deg) scale(1.1);
+    box-shadow: 0 0 56px rgba(247, 129, 102, 0.6);
+}
+.about-icon i {
+    font-size: 2.1rem;
+    background: linear-gradient(135deg, var(--accent), var(--blue));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    filter: drop-shadow(0 0 14px rgba(247, 129, 102, 0.7));
+}
+.about-card h3 { font-size: 1.4rem; margin-bottom: 16px; position: relative; z-index: 2; }
+.about-card p { color: var(--muted); position: relative; z-index: 2; font-size: 0.96rem; }
 
-/* ================= ТАЙМЛАЙН ================= */
-.timeline { position: relative; max-width: 820px; margin: 0 auto; }
+/* ============================================================
+   TIMELINE
+============================================================ */
+.timeline { position: relative; max-width: 880px; margin: 0 auto; padding: 20px 0; }
 .timeline-line {
     position: absolute;
-    top: 0;
-    left: 50%;
+    top: 0; left: 50%;
     transform: translateX(-50%);
-    width: 3px;
-    height: 100%;
-    background: linear-gradient(to bottom, var(--accent), var(--purple), transparent);
-    opacity: 0.6;
+    width: 2px; height: 100%;
+    background: linear-gradient(to bottom, var(--accent), var(--purple), var(--blue), transparent);
+    opacity: 0.75;
+    box-shadow: 0 0 24px rgba(247, 129, 102, 0.6);
 }
 .timeline-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-bottom: 60px;
     position: relative;
-    gap: 20px;
+    gap: 26px;
 }
 .timeline-item:nth-child(odd) { flex-direction: row-reverse; }
-
 .timeline-date {
     flex: 1;
     text-align: center;
     font-family: 'Orbitron', sans-serif;
-    font-size: 1.02rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: var(--accent);
-    padding: 10px 16px;
-    background: var(--glass);
-    border-radius: 12px;
-    border: 1px solid rgba(247, 129, 102, 0.35);
-    backdrop-filter: blur(10px);
+    padding: 14px 20px;
+    background: rgba(247, 129, 102, 0.08);
+    border-radius: 14px;
+    border: 1px solid rgba(247, 129, 102, 0.4);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 28px rgba(247, 129, 102, 0.25);
 }
 .timeline-content {
     flex: 2;
-    padding: 22px 24px;
-    background: var(--glass);
-    border-radius: 16px;
+    padding: 26px 28px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 20px;
     border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    transition: var(--transition);
+    backdrop-filter: blur(14px);
+    transition: all 0.6s var(--ease-expo);
 }
 .timeline-content:hover {
-    border-color: rgba(247, 129, 102, 0.5);
-    box-shadow: var(--glow);
+    transform: translateY(-8px);
+    border-color: rgba(247, 129, 102, 0.55);
+    box-shadow: 0 26px 60px rgba(247, 129, 102, 0.3);
 }
-.timeline-content h4 { font-size: 1.12rem; margin-bottom: 6px; }
-.timeline-content p { color: var(--muted); }
-
+.timeline-content h4 { font-size: 1.18rem; margin-bottom: 10px; color: #fff; }
+.timeline-content p { color: var(--muted); font-size: 0.94rem; }
 .timeline-dot {
     position: absolute;
-    top: 50%;
-    left: 50%;
+    top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    width: 18px;
-    height: 18px;
+    width: 22px; height: 22px;
     background: var(--accent);
     border-radius: 50%;
     z-index: 2;
-    box-shadow: 0 0 24px var(--accent), 0 0 8px #fff inset;
+    box-shadow: 0 0 28px var(--accent), 0 0 0 5px rgba(247, 129, 102, 0.15);
+    animation: dotPulse 2s infinite;
+}
+@keyframes dotPulse {
+    0%, 100% { box-shadow: 0 0 28px var(--accent), 0 0 0 5px rgba(247, 129, 102, 0.15); }
+    50%      { box-shadow: 0 0 40px var(--accent), 0 0 0 12px rgba(247, 129, 102, 0.05); }
 }
 
-/* ================= УЧАСТНИКИ ================= */
+/* ============================================================
+   ★★★ КАРТОЧКИ УЧАСТНИКОВ — ИСПРАВЛЕННЫЙ FLIP ★★★
+============================================================ */
 .participants-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-    gap: 28px;
-    margin-bottom: 60px;
+    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    gap: 32px;
+    margin-bottom: 70px;
 }
 
+/* ★ КЛЮЧЕВОЙ FIX: обёртка с perspective, карточка БЕЗ смещения */
 .participant-card {
-    height: 370px;
-    perspective: 1400px;
+    height: 400px;
     position: relative;
+    perspective: 1600px; /* ★ perspective на обёртке, не на inner */
+    /* ★ НИКАКИХ transform у обёртки — она не двигается */
 }
+
 .card-inner {
     position: relative;
     width: 100%;
     height: 100%;
-    transition: transform 0.95s cubic-bezier(0.22, 1, 0.36, 1);
+    transition: transform 0.9s var(--ease-expo);
     transform-style: preserve-3d;
+    transform-origin: center center;
+    /* ★ Только rotateY при hover — НИКАКИХ translate */
 }
-.participant-card:hover .card-inner { transform: rotateY(180deg); }
+.participant-card:hover .card-inner {
+    transform: rotateY(180deg);
+}
 
 .card-front,
 .card-back {
     position: absolute;
     inset: 0;
-    border-radius: 22px;
+    border-radius: 26px;
     overflow: hidden;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
+    /* ★ Запрещаем менять размеры/позицию — только содержимое меняется */
+    transform: translateZ(0);
 }
-
 .card-front {
-    background: linear-gradient(180deg, rgba(22, 27, 34, 0.85), rgba(11, 15, 22, 0.9));
-    backdrop-filter: blur(14px);
+    background: linear-gradient(180deg, rgba(22, 27, 34, 0.94), rgba(11, 15, 22, 0.98));
+    backdrop-filter: blur(18px);
     border: 1px solid var(--glass-border);
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 30px 20px;
+    padding: 34px 24px;
     text-align: center;
     transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
 .card-front::before {
     content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 30%);
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), transparent 35%);
+    pointer-events: none;
+}
+.card-front::after {
+    content: '';
+    position: absolute; inset: -1px;
+    border-radius: 26px;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255,255,255,0.25), transparent 50%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0.6;
     pointer-events: none;
 }
 .card-glow {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at center, rgba(247, 129, 102, 0.12), transparent 70%);
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at center, rgba(247, 129, 102, 0.14), transparent 70%);
     pointer-events: none;
     transition: background 0.4s ease;
 }
-
 .participant-avatar {
     position: relative;
-    width: 112px;
-    height: 112px;
-    margin-bottom: 18px;
+    width: 122px; height: 122px;
+    margin-bottom: 22px;
     z-index: 2;
 }
 .avatar-frame {
-    position: absolute;
-    inset: -5px;
+    position: absolute; inset: -6px;
     border-radius: 50%;
-    background: conic-gradient(from 0deg, var(--accent), var(--blue), var(--green), var(--purple), var(--accent));
+    background: conic-gradient(from 0deg, var(--accent), var(--blue), var(--green), var(--purple), var(--pink), var(--accent));
     -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
             mask-composite: exclude;
     border: 3px solid transparent;
     animation: rotate 8s linear infinite;
+    filter: drop-shadow(0 0 18px rgba(247, 129, 102, 0.55));
 }
 .avatar-img {
-    width: 100%;
-    height: 100%;
+    width: 100%; height: 100%;
     border-radius: 50%;
     object-fit: cover;
     border: 3px solid var(--bg-2);
     background: var(--bg-2);
+    position: relative;
+    z-index: 1;
 }
-
-.participant-name { font-size: 1.32rem; margin-bottom: 4px; z-index: 2; }
-.participant-role { color: var(--accent); font-size: 0.92rem; margin-bottom: 16px; z-index: 2; }
+.participant-name { font-size: 1.4rem; margin-bottom: 6px; z-index: 2; color: #fff; }
+.participant-role {
+    color: var(--accent);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    z-index: 2;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+}
 .participant-skills {
     display: flex;
     flex-wrap: wrap;
@@ -598,393 +982,398 @@ section { padding: 110px 0; position: relative; }
     z-index: 2;
 }
 .skill {
-    padding: 5px 12px;
+    padding: 6px 14px;
     background: rgba(88, 166, 255, 0.1);
     border-radius: 14px;
-    font-size: 0.74rem;
+    font-size: 0.72rem;
     color: var(--blue);
-    border: 1px solid rgba(88, 166, 255, 0.3);
+    border: 1px solid rgba(88, 166, 255, 0.35);
+    transition: all 0.4s var(--ease-expo);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
 }
-
+.skill:hover {
+    background: rgba(88, 166, 255, 0.22);
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(88, 166, 255, 0.55);
+}
 .card-hover {
     position: absolute;
-    bottom: 18px;
-    right: 18px;
-    width: 38px;
-    height: 38px;
-    background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+    bottom: 22px; right: 22px;
+    width: 44px; height: 44px;
+    background: linear-gradient(135deg, var(--accent), #e56b50);
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     opacity: 0;
-    transform: translateY(20px);
-    transition: var(--transition);
-    z-index: 2;
+    transform: translateY(20px) scale(0.7);
+    transition: all 0.5s var(--ease-expo);
+    z-index: 3;
     color: #fff;
-    box-shadow: 0 0 20px rgba(247, 129, 102, 0.55);
+    box-shadow: 0 0 28px rgba(247, 129, 102, 0.7);
 }
 .participant-card:hover .card-hover {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
 }
-
 .card-back {
-    background: linear-gradient(135deg, rgba(22, 27, 34, 0.95), rgba(11, 15, 22, 0.95));
-    backdrop-filter: blur(16px);
+    background: linear-gradient(135deg, rgba(22, 27, 34, 0.98), rgba(11, 15, 22, 0.98));
+    backdrop-filter: blur(22px);
+    /* ★ Только rotateY(180deg), БЕЗ translateZ */
     transform: rotateY(180deg);
-    padding: 28px;
+    padding: 34px 28px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     text-align: center;
-    border: 1px solid rgba(247, 129, 102, 0.55);
-    box-shadow: var(--glow);
+    border: 1px solid rgba(247, 129, 102, 0.6);
+    box-shadow: 0 0 70px rgba(247, 129, 102, 0.45), inset 0 0 50px rgba(247, 129, 102, 0.06);
 }
-.card-back h3 { font-size: 1.45rem; margin-bottom: 12px; }
-.card-back p { color: var(--muted); margin-bottom: 20px; font-size: 0.94rem; }
-
+.card-back h3 { font-size: 1.55rem; margin-bottom: 16px; color: #fff; }
+.card-back p { color: var(--muted); margin-bottom: 24px; font-size: 0.95rem; }
 .github-btn {
-    padding: 10px 22px;
-    background: var(--glass-strong);
+    padding: 13px 26px;
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid var(--glass-border);
-    border-radius: 10px;
+    border-radius: 12px;
     color: var(--text);
     text-decoration: none;
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    transition: var(--transition);
-    font-size: 0.9rem;
+    gap: 10px;
+    transition: all 0.5s var(--ease-expo);
+    font-size: 0.92rem;
+    font-weight: 700;
     position: relative;
     z-index: 5;
+    overflow: hidden;
+    font-family: 'JetBrains Mono', monospace;
 }
+.github-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.7s ease;
+}
+.github-btn:hover::before { transform: translateX(100%); }
 .github-btn:hover {
     background: var(--accent);
     border-color: var(--accent);
-    transform: translateY(-3px);
-    box-shadow: 0 12px 24px rgba(247, 129, 102, 0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 18px 36px rgba(247, 129, 102, 0.55);
 }
 
-/* ================= МЕНТОР ================= */
+/* ============================================================
+   MENTOR
+============================================================ */
 .mentor-card {
     background: linear-gradient(135deg, rgba(179, 146, 255, 0.1), rgba(88, 166, 255, 0.1));
-    backdrop-filter: blur(16px);
-    border-radius: 24px;
-    padding: 40px 30px;
+    backdrop-filter: blur(22px);
+    border-radius: 30px;
+    padding: 52px 38px;
     text-align: center;
-    border: 1px solid rgba(179, 146, 255, 0.35);
+    border: 1px solid rgba(179, 146, 255, 0.4);
     position: relative;
     overflow: hidden;
     grid-column: 1 / -1;
-    max-width: 640px;
+    max-width: 700px;
     margin: 0 auto;
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 44px 110px rgba(0, 0, 0, 0.55), 0 0 90px rgba(179, 146, 255, 0.25);
 }
 .mentor-glow {
-    position: absolute;
-    inset: -50%;
-    background: radial-gradient(circle, rgba(179, 146, 255, 0.15) 0%, transparent 70%);
+    position: absolute; inset: -50%;
+    background: radial-gradient(circle, rgba(179, 146, 255, 0.2) 0%, transparent 70%);
     pointer-events: none;
     animation: glowPulse 4s infinite;
 }
 .mentor-avatar {
     position: relative;
-    width: 140px;
-    height: 140px;
-    margin: 0 auto 22px;
+    width: 158px; height: 158px;
+    margin: 0 auto 26px;
     z-index: 2;
 }
 .mentor-frame {
     border-width: 4px;
-    background: conic-gradient(from 0deg, var(--purple), var(--blue), var(--pink), var(--purple));
+    background: conic-gradient(from 0deg, var(--purple), var(--blue), var(--pink), var(--cyan), var(--purple));
+    filter: drop-shadow(0 0 28px rgba(179, 146, 255, 0.75));
 }
-.mentor-name { font-size: 1.75rem; margin-bottom: 6px; position: relative; z-index: 2; }
-.mentor-role { color: var(--purple); font-size: 1.05rem; margin-bottom: 18px; position: relative; z-index: 2; }
-.mentor-bio {
-    color: var(--muted);
-    margin-bottom: 26px;
-    max-width: 520px;
-    margin-inline: auto;
-    position: relative;
-    z-index: 2;
-}
-.mentor-contact {
-    display: flex;
-    justify-content: center;
-    gap: 18px;
-    position: relative;
-    z-index: 2;
-}
-.social-btn {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: var(--glass-strong);
-    border: 1px solid rgba(179, 146, 255, 0.4);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.mentor-name { font-size: 2rem; margin-bottom: 8px; color: #fff; position: relative; z-index: 2; }
+.mentor-role {
     color: var(--purple);
-    font-size: 1.1rem;
-    transition: var(--transition);
+    font-size: 1rem;
+    margin-bottom: 22px;
+    position: relative;
+    z-index: 2;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}
+.mentor-bio { color: var(--muted); margin-bottom: 30px; max-width: 560px; margin-inline: auto; position: relative; z-index: 2; font-size: 0.98rem; }
+.mentor-contact { display: flex; justify-content: center; gap: 18px; position: relative; z-index: 2; }
+.social-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(179, 146, 255, 0.12);
+    border: 1px solid rgba(179, 146, 255, 0.45);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--purple);
+    font-size: 1.18rem;
+    transition: all 0.5s var(--ease-expo);
     text-decoration: none;
 }
 .social-btn:hover {
     background: var(--purple);
     color: #fff;
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(179, 146, 255, 0.45);
+    transform: translateY(-7px) scale(1.08);
+    box-shadow: 0 18px 36px rgba(179, 146, 255, 0.6);
 }
 
-/* ================= РЕСУРСЫ ================= */
+/* ============================================================
+   ACTIONS
+============================================================ */
 .actions-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 26px;
+    grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+    gap: 30px;
 }
 .action-btn {
-    background: var(--glass);
-    backdrop-filter: blur(14px);
-    border-radius: 22px;
-    padding: 28px;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(18px);
+    border-radius: 26px;
+    padding: 34px;
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 24px;
     text-decoration: none;
     border: 1px solid var(--glass-border);
-    transition: var(--transition);
+    transition: transform 0.6s var(--ease-expo), box-shadow 0.6s var(--ease-expo), border-color 0.5s;
     position: relative;
     overflow: hidden;
+    isolation: isolate;
+    will-change: transform;
 }
-.action-btn::after {
+.action-btn::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transform: translateX(-100%);
+    transition: transform 0.8s ease;
+    pointer-events: none;
+}
+.action-btn:hover::before { transform: translateX(100%); }
+.action-btn:hover {
+    border-color: rgba(247, 129, 102, 0.45);
+    box-shadow: 0 34px 80px rgba(247, 129, 102, 0.28), 0 0 70px rgba(247, 129, 102, 0.15);
+}
+.btn-icon {
+    width: 72px; height: 72px;
+    border-radius: 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.9rem;
+    flex-shrink: 0;
+    transition: all 0.6s var(--ease-expo);
+    position: relative;
+    z-index: 1;
+}
+.project-btn .btn-icon { background: rgba(88, 166, 255, 0.15); color: var(--blue);   box-shadow: 0 0 28px rgba(88, 166, 255, 0.3); }
+.academy-btn .btn-icon { background: rgba(126, 231, 135, 0.15); color: var(--green); box-shadow: 0 0 28px rgba(126, 231, 135, 0.3); }
+.tasks-btn   .btn-icon { background: rgba(247, 129, 102, 0.15); color: var(--accent); box-shadow: 0 0 28px rgba(247, 129, 102, 0.3); }
+.rules-btn   .btn-icon { background: rgba(179, 146, 255, 0.15); color: var(--purple); box-shadow: 0 0 28px rgba(179, 146, 255, 0.3); }
+.action-btn:hover .btn-icon { transform: rotate(-10deg) scale(1.12); }
+.btn-content { flex: 1; position: relative; z-index: 1; }
+.btn-content h3 { font-size: 1.32rem; margin-bottom: 8px; color: #fff; }
+.btn-content p { color: var(--muted); font-size: 0.9rem; }
+.btn-arrow {
+    color: var(--muted);
+    font-size: 1.4rem;
+    transition: all 0.5s var(--ease-expo);
+    position: relative;
+    z-index: 1;
+}
+.action-btn:hover .btn-arrow { color: var(--accent); transform: translateX(12px); }
+
+/* ============================================================
+   FOOTER
+============================================================ */
+.footer {
+    background: rgba(4, 5, 10, 0.92);
+    backdrop-filter: blur(18px);
+    border-top: 1px solid var(--glass-border);
+    padding: 80px 0 36px;
+    position: relative;
+    z-index: 5;
+}
+.footer::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
-    transition: left 0.6s ease;
-}
-.action-btn:hover::after { left: 100%; }
-.action-btn:hover {
-    transform: translateY(-10px);
-    border-color: rgba(247, 129, 102, 0.5);
-}
-.project-btn:hover { box-shadow: 0 24px 48px rgba(88, 166, 255, 0.28); }
-.academy-btn:hover { box-shadow: 0 24px 48px rgba(126, 231, 135, 0.28); }
-.tasks-btn:hover { box-shadow: 0 24px 48px rgba(247, 129, 102, 0.28); }
-.rules-btn:hover { box-shadow: 0 24px 48px rgba(179, 146, 255, 0.28); }
-
-.btn-icon {
-    width: 62px;
-    height: 62px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.7rem;
-    flex-shrink: 0;
-}
-.project-btn .btn-icon { background: rgba(88, 166, 255, 0.15); color: var(--blue); }
-.academy-btn .btn-icon { background: rgba(126, 231, 135, 0.15); color: var(--green); }
-.tasks-btn .btn-icon { background: rgba(247, 129, 102, 0.15); color: var(--accent); }
-.rules-btn .btn-icon { background: rgba(179, 146, 255, 0.15); color: var(--purple); }
-
-.btn-content { flex: 1; }
-.btn-content h3 { font-size: 1.22rem; margin-bottom: 6px; }
-.btn-content p { color: var(--muted); font-size: 0.9rem; }
-.btn-arrow { color: var(--muted); font-size: 1.3rem; transition: var(--transition); }
-.action-btn:hover .btn-arrow { color: var(--accent); transform: translateX(8px); }
-
-/* ================= ФУТЕР ================= */
-.footer {
-    background: rgba(6, 8, 12, 0.85);
-    backdrop-filter: blur(14px);
-    border-top: 1px solid var(--line);
-    padding: 60px 0 30px;
-    margin-top: 100px;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--blue), var(--purple), transparent);
+    opacity: 0.6;
 }
 .footer-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
-    gap: 40px;
-    margin-bottom: 36px;
+    gap: 46px;
+    margin-bottom: 44px;
 }
 .footer-logo { flex: 1; min-width: 200px; }
-.footer-logo-img {
-    width: 180px;
-    height: auto;
-    filter: drop-shadow(0 0 14px rgba(247, 129, 102, 0.35));
-}
+.footer-logo-img { width: 190px; height: auto; filter: drop-shadow(0 0 22px rgba(247, 129, 102, 0.45)); }
 .footer-info { flex: 2; min-width: 280px; }
-.footer-info h3 { font-size: 1.45rem; margin-bottom: 12px; }
-.footer-info p { color: var(--muted); margin-bottom: 18px; }
+.footer-info h3 { font-size: 1.55rem; margin-bottom: 16px; color: #fff; }
+.footer-info p { color: var(--muted); margin-bottom: 22px; }
 .footer-tags { display: flex; flex-wrap: wrap; gap: 10px; }
 .tag {
-    padding: 5px 14px;
-    background: var(--glass-strong);
+    padding: 7px 18px;
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 14px;
-    font-size: 0.84rem;
+    font-size: 0.8rem;
     color: var(--muted);
     border: 1px solid var(--glass-border);
+    transition: all 0.5s var(--ease-expo);
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
 }
-.footer-social {
-    flex: 1;
-    min-width: 200px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 14px;
+.tag:hover {
+    color: var(--accent);
+    border-color: rgba(247, 129, 102, 0.55);
+    transform: translateY(-4px);
+    box-shadow: 0 0 24px rgba(247, 129, 102, 0.4);
 }
+.footer-social { flex: 1; min-width: 200px; display: flex; justify-content: flex-end; gap: 14px; }
 .social-icon {
-    width: 46px;
-    height: 46px;
+    width: 52px; height: 52px;
     border-radius: 50%;
-    background: var(--glass-strong);
+    background: rgba(255, 255, 255, 0.05);
     border: 1px solid var(--glass-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: flex; align-items: center; justify-content: center;
     color: var(--text);
-    font-size: 1.1rem;
-    transition: var(--transition);
+    font-size: 1.15rem;
+    transition: all 0.5s var(--ease-expo);
     text-decoration: none;
 }
 .social-icon:hover {
     background: var(--accent);
     border-color: var(--accent);
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(247, 129, 102, 0.4);
+    transform: translateY(-7px) scale(1.08);
+    box-shadow: 0 18px 36px rgba(247, 129, 102, 0.6);
 }
 .footer-bottom {
     text-align: center;
-    padding-top: 26px;
-    border-top: 1px solid var(--line);
+    padding-top: 30px;
+    border-top: 1px solid var(--glass-border);
     color: var(--muted);
     font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 .footer-bottom p { margin-bottom: 8px; }
-.pulse-heart { color: var(--accent); animation: heartbeat 1.6s infinite; }
-
-/* ================= АНИМАЦИИ ================= */
-@keyframes textPulse {
-    0%, 100% { opacity: 0.7; }
-    50% { opacity: 1; }
-}
-@keyframes logoFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-16px); }
-}
-@keyframes glowPulse {
-    0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
-    50% { opacity: 0.9; transform: translate(-50%, -50%) scale(1.08); }
-}
-@keyframes pulseRing {
-    0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.5; }
-    70% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
-    100% { transform: translate(-50%, -50%) scale(1.2); opacity: 0; }
-}
-@keyframes titleReveal {
-    to { opacity: 1; transform: translateY(0); }
-}
-@keyframes gradientMove {
-    0% { background-position: 0% 50%; }
-    100% { background-position: 200% 50%; }
-}
-@keyframes bounce {
-    0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
-    40% { transform: translateX(-50%) translateY(-14px); }
-    60% { transform: translateX(-50%) translateY(-7px); }
-}
-@keyframes rotate {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-@keyframes heartbeat {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.25); }
+.pulse-heart {
+    color: var(--accent);
+    animation: heartbeat 1.6s infinite;
+    filter: drop-shadow(0 0 10px rgba(247, 129, 102, 0.8));
 }
 
+/* ============================================================
+   REVEAL
+============================================================ */
 .reveal {
     opacity: 0;
-    transform: translateY(30px);
-    transition: opacity 0.85s ease, transform 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+    transform: translateY(50px);
+    transition: opacity 1s ease, transform 1s var(--ease-expo);
 }
-.reveal.animate-in {
-    opacity: 1;
-    transform: translateY(0);
-}
+.reveal.animate-in { opacity: 1; transform: translateY(0); }
 
-/* ================= АДАПТИВ ================= */
+/* ============================================================
+   АДАПТИВ
+============================================================ */
 @media (max-width: 992px) {
     .participants-container { grid-template-columns: repeat(2, 1fr); }
-    .header-stats { gap: 32px; }
+    .header-stats { gap: 38px; }
+    /* Отключаем портал на планшетах — слишком тяжело */
+    .portal { height: auto !important; }
+    .portal-sticky { position: relative; height: 60vh; }
 }
 @media (max-width: 768px) {
-    section { padding: 80px 0; }
+    .section { padding: 70px 0; }
     .timeline-item,
-    .timeline-item:nth-child(odd) {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
+    .timeline-item:nth-child(odd) { flex-direction: column; align-items: center; text-align: center; }
     .timeline-line { left: 18px; }
     .timeline-dot { left: 18px; }
-    .timeline-date { margin-bottom: 14px; }
+    .timeline-date { margin-bottom: 16px; }
     .participants-container { grid-template-columns: 1fr; }
     .footer-content { flex-direction: column; text-align: center; }
     .footer-social { justify-content: center; }
     .action-btn { flex-direction: column; text-align: center; }
-    .btn-icon { margin-bottom: 14px; }
+    .btn-icon { margin-bottom: 16px; }
+    .header-stats { gap: 30px; }
+    .participant-card { height: 380px; }
+    .portal { height: auto !important; }
+    .portal-sticky { position: relative; height: 50vh; min-height: 400px; }
+    .portal-text-main { font-size: 2rem; letter-spacing: 4px; }
+    .portal-incoming-title { font-size: 1.5rem; letter-spacing: 3px; }
 }
-
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
+    .portal { height: auto !important; }
+    .portal-sticky { position: relative; height: 40vh; }
 }
 </style>
 </head>
 <body>
 
-<!-- ФОН -->
-<div id="bg-gradient"></div>
-<div id="particles-js"></div>
+<!-- CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
 
-<!-- ПРЕЛОАДЕР -->
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- BACKGROUND -->
+<div id="bg-aurora"></div>
+<div id="bg-grid"></div>
+<div id="bg-noise"></div>
+<div id="particles-js"></div>
+<div id="bg-vignette"></div>
+
+<!-- PRELOADER -->
 <div class="preloader">
     <div class="preloader-content">
         <canvas id="three-preloader"></canvas>
         <div class="loader-text">Загрузка хакатона...</div>
         <div class="loader-sub">NICE GAME • 2026</div>
+        <div class="loader-bar"><div class="loader-bar-fill"></div></div>
     </div>
 </div>
 
 <div class="container">
 
-    <!-- ХЕДЕР -->
+    <!-- HERO -->
     <header class="header">
         <canvas id="three-header"></canvas>
-
         <div class="header-content">
+            <div class="header-badge">
+                <i class="fas fa-circle"></i>
+                ХАКАТОН • 2026
+            </div>
             <div class="logo-container">
                 <div class="logo-glow"></div>
-                <img src="dock/images/logo_hackathon.png" alt="Логотип хакатона" class="logo">
+                <img src="dock/images/logo_hackathon.png" alt="Логотип хакатона" class="logo" onerror="this.style.display='none'">
                 <div class="logo-pulse"></div>
             </div>
-
             <h1 class="main-title">
                 <span class="title-word title-word-1">NICE</span>
                 <span class="title-word title-word-2">GAME</span>
                 <span class="title-word title-word-3">CHALLENGE</span>
             </h1>
-
             <h2 class="subtitle">Хакатон по разработке игр • 15 октября 2026</h2>
 
             <div class="countdown" id="countdown">
@@ -1009,29 +1398,78 @@ section { padding: 110px 0; position: relative; }
             <div class="header-stats">
                 <div class="stat">
                     <i class="fas fa-users"></i>
-                    <span class="stat-number">7</span>
+                    <span class="stat-number" data-count="7">0</span>
                     <span class="stat-label">Участников</span>
                 </div>
                 <div class="stat">
                     <i class="fas fa-calendar-alt"></i>
-                    <span class="stat-number">13</span>
+                    <span class="stat-number" data-count="13">0</span>
                     <span class="stat-label">Дней</span>
                 </div>
                 <div class="stat">
                     <i class="fas fa-trophy"></i>
-                    <span class="stat-number">100</span>
+                    <span class="stat-number" data-count="100">0</span>
                     <span class="stat-label">Топ коинов</span>
                 </div>
             </div>
         </div>
-
         <div class="scroll-indicator" id="scrollBtn">
             <i class="fas fa-chevron-down"></i>
         </div>
     </header>
 
+    <!-- MARQUEE -->
+    <div class="marquee">
+        <div class="marquee-track">
+            <div class="marquee-item">
+                <span>HTML</span><i class="fas fa-circle"></i>
+                <span>CSS</span><i class="fas fa-circle"></i>
+                <span>JAVASCRIPT</span><i class="fas fa-circle"></i>
+                <span>GITHUB</span><i class="fas fa-circle"></i>
+                <span>GAME DEV</span><i class="fas fa-circle"></i>
+                <span>NICE GAME 2026</span><i class="fas fa-circle"></i>
+                <span>HTML</span><i class="fas fa-circle"></i>
+                <span>CSS</span><i class="fas fa-circle"></i>
+                <span>JAVASCRIPT</span><i class="fas fa-circle"></i>
+                <span>GITHUB</span><i class="fas fa-circle"></i>
+                <span>GAME DEV</span><i class="fas fa-circle"></i>
+                <span>NICE GAME 2026</span><i class="fas fa-circle"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- ★★★ ПОРТАЛ 1: HERO → О ХАКАТОНЕ ★★★ -->
+    <div class="portal" data-next="О ХАКАТОНЕ" data-next-sub="MISSION BRIEFING">
+        <div class="portal-sticky">
+            <div class="portal-curtain left"></div>
+            <div class="portal-curtain right"></div>
+
+            <div class="portal-vortex">
+                <div class="portal-ring r1"></div>
+                <div class="portal-ring r2"></div>
+                <div class="portal-ring r3"></div>
+                <div class="portal-ring r4"></div>
+                <div class="portal-ring r5"></div>
+            </div>
+
+            <div class="portal-streaks" data-streaks></div>
+
+            <div class="portal-flash"></div>
+
+            <div class="portal-text">
+                <div class="portal-text-main">ПОГРУЖЕНИЕ</div>
+                <div class="portal-text-sub">ENTERING THE GAME ZONE</div>
+            </div>
+
+            <div class="portal-incoming">
+                <div class="portal-incoming-title">О ХАКАТОНЕ</div>
+                <div class="portal-incoming-sub">// MISSION BRIEFING</div>
+            </div>
+        </div>
+    </div>
+
     <!-- О ХАКАТОНЕ -->
-    <section class="about-section reveal">
+    <section class="section about-section">
         <div class="section-header">
             <h2 class="section-title">
                 <span class="title-line"></span>
@@ -1040,7 +1478,6 @@ section { padding: 110px 0; position: relative; }
             </h2>
             <div class="section-subtitle">Создайте свою игру — жанр выбираете вы</div>
         </div>
-
         <div class="about-content">
             <div class="about-card reveal">
                 <div class="about-icon"><i class="fas fa-gamepad"></i></div>
@@ -1061,7 +1498,6 @@ section { padding: 110px 0; position: relative; }
 
         <div class="timeline">
             <div class="timeline-line"></div>
-
             <div class="timeline-item reveal">
                 <div class="timeline-date">15 Окт</div>
                 <div class="timeline-content">
@@ -1070,7 +1506,6 @@ section { padding: 110px 0; position: relative; }
                 </div>
                 <div class="timeline-dot"></div>
             </div>
-
             <div class="timeline-item reveal">
                 <div class="timeline-date">20 Окт</div>
                 <div class="timeline-content">
@@ -1079,7 +1514,6 @@ section { padding: 110px 0; position: relative; }
                 </div>
                 <div class="timeline-dot"></div>
             </div>
-
             <div class="timeline-item reveal">
                 <div class="timeline-date">27 Окт</div>
                 <div class="timeline-content">
@@ -1091,8 +1525,38 @@ section { padding: 110px 0; position: relative; }
         </div>
     </section>
 
+    <!-- ★★★ ПОРТАЛ 2: О ХАКАТОНЕ → УЧАСТНИКИ ★★★ -->
+    <div class="portal" data-next="УЧАСТНИКИ" data-next-sub="MEET THE CREW">
+        <div class="portal-sticky">
+            <div class="portal-curtain left"></div>
+            <div class="portal-curtain right"></div>
+
+            <div class="portal-vortex">
+                <div class="portal-ring r1"></div>
+                <div class="portal-ring r2"></div>
+                <div class="portal-ring r3"></div>
+                <div class="portal-ring r4"></div>
+                <div class="portal-ring r5"></div>
+            </div>
+
+            <div class="portal-streaks" data-streaks></div>
+
+            <div class="portal-flash"></div>
+
+            <div class="portal-text">
+                <div class="portal-text-main">КОМАНДА</div>
+                <div class="portal-text-sub">LOADING PARTICIPANTS</div>
+            </div>
+
+            <div class="portal-incoming">
+                <div class="portal-incoming-title">УЧАСТНИКИ</div>
+                <div class="portal-incoming-sub">// MEET THE CREW</div>
+            </div>
+        </div>
+    </div>
+
     <!-- УЧАСТНИКИ -->
-    <section class="participants-section reveal">
+    <section class="section participants-section">
         <div class="section-header">
             <h2 class="section-title">
                 <span class="title-line"></span>
@@ -1101,241 +1565,41 @@ section { padding: 110px 0; position: relative; }
             </h2>
             <div class="section-subtitle">Команда разработчиков и ментор</div>
         </div>
-
-        <div class="participants-container">
-
-            <!-- УЧАСТНИК 1 -->
-            <div class="participant-card reveal" data-id="1">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice1&backgroundColor=0d1117" alt="Участник 1" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 1</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 1</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 2 -->
-            <div class="participant-card reveal" data-id="2">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice2&backgroundColor=161b22" alt="Участник 2" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 2</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 2</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 3 -->
-            <div class="participant-card reveal" data-id="3">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice3&backgroundColor=0d47a1" alt="Участник 3" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 3</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 3</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 4 -->
-            <div class="participant-card reveal" data-id="4">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice4&backgroundColor=1a73e8" alt="Участник 4" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 4</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 4</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 5 -->
-            <div class="participant-card reveal" data-id="5">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice5&backgroundColor=238636" alt="Участник 5" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 5</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 5</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 6 -->
-            <div class="participant-card reveal" data-id="6">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice6&backgroundColor=f78166" alt="Участник 6" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 6</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 6</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- УЧАСТНИК 7 -->
-            <div class="participant-card reveal" data-id="7">
-                <div class="card-inner">
-                    <div class="card-front">
-                        <div class="card-glow"></div>
-                        <div class="participant-avatar">
-                            <div class="avatar-frame"></div>
-                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Nice7&backgroundColor=7ee787" alt="Участник 7" class="avatar-img">
-                        </div>
-                        <h3 class="participant-name">Имя 7</h3>
-                        <p class="participant-role">Роль</p>
-                        <div class="participant-skills">
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                            <span class="skill">Навык</span>
-                        </div>
-                        <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
-                    </div>
-                    <div class="card-back">
-                        <div class="card-back-content">
-                            <h3>Имя 7</h3>
-                            <p>Короткое описание участника. Впиши сюда всё, что нужно.</p>
-                            <a href="https://github.com/" target="_blank" class="github-btn">
-                                <i class="fab fa-github"></i> GitHub
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- МЕНТОР (аватарка та же) -->
-            <div class="mentor-card reveal">
-                <div class="mentor-glow"></div>
-                <div class="mentor-avatar">
-                    <div class="avatar-frame mentor-frame"></div>
-                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=b392ff" alt="Ментор" class="avatar-img">
-                </div>
-                <h3 class="mentor-name">Сергей</h3>
-                <p class="mentor-role">Ментор проекта</p>
-                <p class="mentor-bio">Опытный разработчик с 5+ лет горького опыта. Может что-то вспомнить и даже помочь, но не то и другое сразу.</p>
-                <div class="mentor-contact">
-                    <a href="https://github.com/Gabryelf" target="_blank" class="social-btn"><i class="fab fa-github"></i></a>
-                    <a href="https://topcollegetcf.github.io/WikiOrganizatom/" class="social-btn"><i class="fas fa-envelope"></i></a>
-                    <a href="https://t.me/@Gabryelf" target="_blank" class="social-btn"><i class="fab fa-telegram"></i></a>
-                </div>
-            </div>
-
-        </div>
+        <div class="participants-container" id="participants-grid"></div>
     </section>
 
+    <!-- ★★★ ПОРТАЛ 3: УЧАСТНИКИ → РЕСУРСЫ ★★★ -->
+    <div class="portal" data-next="РЕСУРСЫ" data-next-sub="ARSENAL UNLOCKED">
+        <div class="portal-sticky">
+            <div class="portal-curtain left"></div>
+            <div class="portal-curtain right"></div>
+
+            <div class="portal-vortex">
+                <div class="portal-ring r1"></div>
+                <div class="portal-ring r2"></div>
+                <div class="portal-ring r3"></div>
+                <div class="portal-ring r4"></div>
+                <div class="portal-ring r5"></div>
+            </div>
+
+            <div class="portal-streaks" data-streaks></div>
+
+            <div class="portal-flash"></div>
+
+            <div class="portal-text">
+                <div class="portal-text-main">АРСЕНАЛ</div>
+                <div class="portal-text-sub">ACCESSING RESOURCES</div>
+            </div>
+
+            <div class="portal-incoming">
+                <div class="portal-incoming-title">РЕСУРСЫ</div>
+                <div class="portal-incoming-sub">// ARSENAL UNLOCKED</div>
+            </div>
+        </div>
+    </div>
+
     <!-- РЕСУРСЫ -->
-    <section class="actions-section reveal">
+    <section class="section actions-section">
         <div class="section-header">
             <h2 class="section-title">
                 <span class="title-line"></span>
@@ -1344,9 +1608,8 @@ section { padding: 110px 0; position: relative; }
             </h2>
             <div class="section-subtitle">Все необходимое для участия</div>
         </div>
-
         <div class="actions-container">
-            <a href="https://github.com/TopCollegeTCF/Hackathon_knight-s-move_2026" target="_blank" class="action-btn project-btn">
+            <a href="https://github.com/TopCollegeTCF/Hackathon_knight-s-move_2026" target="_blank" class="action-btn project-btn magnetic">
                 <div class="btn-icon"><i class="fab fa-github"></i></div>
                 <div class="btn-content">
                     <h3>Проект на GitHub</h3>
@@ -1354,8 +1617,7 @@ section { padding: 110px 0; position: relative; }
                 </div>
                 <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-
-            <a href="https://msk.top-academy.ru/" target="_blank" class="action-btn academy-btn">
+            <a href="https://msk.top-academy.ru/" target="_blank" class="action-btn academy-btn magnetic">
                 <div class="btn-icon"><i class="fas fa-graduation-cap"></i></div>
                 <div class="btn-content">
                     <h3>Сайт академии</h3>
@@ -1363,8 +1625,7 @@ section { padding: 110px 0; position: relative; }
                 </div>
                 <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-
-            <a href="https://github.com/TopCollegeTCF/Hackathon_knight-s-move_2026/blob/main/README.md" target="_blank" class="action-btn tasks-btn">
+            <a href="https://github.com/TopCollegeTCF/Hackathon_knight-s-move_2026/blob/main/README.md" target="_blank" class="action-btn tasks-btn magnetic">
                 <div class="btn-icon"><i class="fas fa-tasks"></i></div>
                 <div class="btn-content">
                     <h3>Задачи проекта</h3>
@@ -1372,8 +1633,7 @@ section { padding: 110px 0; position: relative; }
                 </div>
                 <div class="btn-arrow"><i class="fas fa-arrow-right"></i></div>
             </a>
-
-            <a href="hakaton_baner.html" class="action-btn rules-btn">
+            <a href="hakaton_baner.html" class="action-btn rules-btn magnetic">
                 <div class="btn-icon"><i class="fas fa-book"></i></div>
                 <div class="btn-content">
                     <h3>Правила хакатона</h3>
@@ -1384,11 +1644,11 @@ section { padding: 110px 0; position: relative; }
         </div>
     </section>
 
-    <!-- ФУТЕР -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="dock/images/Top_logo_500_500.jpg" alt="Логотип" class="footer-logo-img">
+                <img src="dock/images/Top_logo_500_500.jpg" alt="Логотип" class="footer-logo-img" onerror="this.style.display='none'">
             </div>
             <div class="footer-info">
                 <h3>Nice Game Challenge 2026</h3>
@@ -1420,31 +1680,119 @@ section { padding: 110px 0; position: relative; }
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isMobile = window.matchMedia('(max-width: 992px)').matches;
 
     /* ============================================================
-       3D — ОБЩИЙ ФУНКЦИОНАЛ ДЛЯ ПРЕЛОАДЕРА И ХЕДЕРА
-       ============================================================ */
+       PARTICIPANTS DATA
+    ============================================================ */
+    const participants = [
+        { id: 1, name: 'Имя 1', role: 'Team Lead',    skills: ['JS', 'Git', 'Logic'],    bio: 'Лидер команды, отвечает за архитектуру проекта и распределение задач.', seed: 'Nice1', color: '0d1117', gh: 'https://github.com/' },
+        { id: 2, name: 'Имя 2', role: 'Game Logic',   skills: ['JS', 'Physics', 'Math'], bio: 'Разрабатывает игровую механику, физику и балансировку.', seed: 'Nice2', color: '161b22', gh: 'https://github.com/' },
+        { id: 3, name: 'Имя 3', role: 'UI/UX',         skills: ['CSS', 'Figma', 'Anim'], bio: 'Отвечает за визуал, анимации и пользовательский опыт.', seed: 'Nice3', color: '0d47a1', gh: 'https://github.com/' },
+        { id: 4, name: 'Имя 4', role: 'Frontend',      skills: ['HTML', 'CSS', 'JS'],    bio: 'Собирает интерфейс, вёрстка и адаптив.', seed: 'Nice4', color: '1a73e8', gh: 'https://github.com/' },
+        { id: 5, name: 'Имя 5', role: 'Backend/Logic', skills: ['JS', 'API', 'Data'],    bio: 'Логика данных, сохранения, интеграции.', seed: 'Nice5', color: '238636', gh: 'https://github.com/' },
+        { id: 6, name: 'Имя 6', role: 'QA / Balance',  skills: ['Testing', 'Balance'],   bio: 'Тестирует, находит баги и помогает с балансом.', seed: 'Nice6', color: 'f78166', gh: 'https://github.com/' },
+        { id: 7, name: 'Имя 7', role: 'Art / Sound',   skills: ['Art', 'Sound', 'FX'],   bio: 'Отвечает за графику, спрайты и звуковое сопровождение.', seed: 'Nice7', color: '7ee787', gh: 'https://github.com/' }
+    ];
+
+    /* ============================================================
+       GENERATE CARDS
+    ============================================================ */
+    const grid = document.getElementById('participants-grid');
+    const cardColors = ['#f78166', '#58a6ff', '#7ee787', '#b392ff', '#ffd33d', '#79c0ff', '#ff7eb6'];
+
+    participants.forEach(p => {
+        const card = document.createElement('div');
+        card.className = 'participant-card reveal';
+        card.dataset.id = p.id;
+        card.dataset.color = cardColors[(p.id - 1) % cardColors.length];
+        card.innerHTML = `
+            <div class="card-inner">
+                <div class="card-front">
+                    <div class="card-glow"></div>
+                    <div class="participant-avatar">
+                        <div class="avatar-frame"></div>
+                        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=${p.seed}&backgroundColor=${p.color}" alt="${p.name}" class="avatar-img">
+                    </div>
+                    <h3 class="participant-name">${p.name}</h3>
+                    <p class="participant-role">${p.role}</p>
+                    <div class="participant-skills">
+                        ${p.skills.map(s => `<span class="skill">${s}</span>`).join('')}
+                    </div>
+                    <div class="card-hover"><i class="fas fa-external-link-alt"></i></div>
+                </div>
+                <div class="card-back">
+                    <h3>${p.name}</h3>
+                    <p>${p.bio}</p>
+                    <a href="${p.gh}" target="_blank" class="github-btn">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+
+    const mentorCard = document.createElement('div');
+    mentorCard.className = 'mentor-card reveal';
+    mentorCard.innerHTML = `
+        <div class="mentor-glow"></div>
+        <div class="mentor-avatar">
+            <div class="avatar-frame mentor-frame"></div>
+            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mentor&backgroundColor=b392ff" alt="Ментор" class="avatar-img">
+        </div>
+        <h3 class="mentor-name">Сергей</h3>
+        <p class="mentor-role">Ментор проекта</p>
+        <p class="mentor-bio">Опытный разработчик с 5+ лет горького опыта. Может что-то вспомнить и даже помочь, но не то и другое сразу.</p>
+        <div class="mentor-contact">
+            <a href="https://github.com/Gabryelf" target="_blank" class="social-btn"><i class="fab fa-github"></i></a>
+            <a href="https://topcollegetcf.github.io/WikiOrganizatom/" class="social-btn"><i class="fas fa-envelope"></i></a>
+            <a href="https://t.me/@Gabryelf" target="_blank" class="social-btn"><i class="fab fa-telegram"></i></a>
+        </div>
+    `;
+    grid.appendChild(mentorCard);
+
+    /* ============================================================
+       CURSOR
+    ============================================================ */
+    if (!isMobile) {
+        const dot = document.querySelector('.cursor-dot');
+        const ring = document.querySelector('.cursor-ring');
+        let mx = 0, my = 0, rx = 0, ry = 0;
+
+        window.addEventListener('mousemove', e => {
+            mx = e.clientX; my = e.clientY;
+            dot.style.transform = `translate3d(${mx - 3}px, ${my - 3}px, 0)`;
+        }, { passive: true });
+
+        function loop() {
+            rx += (mx - rx) * 0.18;
+            ry += (my - ry) * 0.18;
+            ring.style.transform = `translate3d(${rx - ring.offsetWidth / 2}px, ${ry - ring.offsetHeight / 2}px, 0)`;
+            requestAnimationFrame(loop);
+        }
+        loop();
+
+        document.querySelectorAll('a, button, .action-btn, .participant-card, .about-card, .countdown-item, .social-btn, .scroll-indicator')
+            .forEach(el => {
+                el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+                el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+            });
+    }
+
+    /* ============================================================
+       3D SCENE
+    ============================================================ */
     function createThreeScene(canvas, options = {}) {
         if (!canvas || typeof THREE === 'undefined') return null;
-
-        const {
-            size = 1,
-            particlesCount = 120,
-            autoRotateSpeed = 0.6,
-            interactive = false
-        } = options;
+        const { size = 1, particlesCount = 120, autoRotateSpeed = 0.6, interactive = false } = options;
 
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(45, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
         camera.position.set(0, 0, 5.5);
 
-        const renderer = new THREE.WebGLRenderer({
-            canvas,
-            alpha: true,
-            antialias: true
-        });
+        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
         function resize() {
@@ -1455,251 +1803,141 @@ document.addEventListener('DOMContentLoaded', function () {
             camera.updateProjectionMatrix();
         }
 
-        // --- Группа ---
         const group = new THREE.Group();
         scene.add(group);
 
-        // --- Основной объект: икосаэдр-кристалл ---
         const geo = new THREE.IcosahedronGeometry(size, 1);
-
         const mat = new THREE.MeshPhysicalMaterial({
-            color: 0x1a2130,
-            metalness: 0.6,
-            roughness: 0.15,
-            clearcoat: 1,
-            clearcoatRoughness: 0.15,
-            emissive: new THREE.Color(0xf78166),
-            emissiveIntensity: 0.18,
-            flatShading: true,
-            transparent: true,
-            opacity: 0.95
+            color: 0x1a2130, metalness: 0.7, roughness: 0.15,
+            clearcoat: 1, clearcoatRoughness: 0.1,
+            emissive: new THREE.Color(0xf78166), emissiveIntensity: 0.25,
+            flatShading: true, transparent: true, opacity: 0.95
         });
+        group.add(new THREE.Mesh(geo, mat));
 
-        const core = new THREE.Mesh(geo, mat);
-        group.add(core);
-
-        // --- Каркас (wireframe) ---
-        const wireGeo = new THREE.IcosahedronGeometry(size * 1.12, 1);
-        const wireMat = new THREE.MeshBasicMaterial({
-            color: 0xf78166,
-            wireframe: true,
-            transparent: true,
-            opacity: 0.55
-        });
+        const wireGeo = new THREE.IcosahedronGeometry(size * 1.14, 1);
+        const wireMat = new THREE.MeshBasicMaterial({ color: 0xf78166, wireframe: true, transparent: true, opacity: 0.6 });
         const wire = new THREE.Mesh(wireGeo, wireMat);
         group.add(wire);
 
-        // --- Внутреннее ядро (светящееся) ---
         const innerGeo = new THREE.IcosahedronGeometry(size * 0.45, 0);
-        const innerMat = new THREE.MeshBasicMaterial({
-            color: 0x58a6ff,
-            transparent: true,
-            opacity: 0.9
-        });
+        const innerMat = new THREE.MeshBasicMaterial({ color: 0x58a6ff, transparent: true, opacity: 0.95 });
         const inner = new THREE.Mesh(innerGeo, innerMat);
         group.add(inner);
 
-        // --- Орбитальные кольца ---
-        const ringMat = new THREE.MeshBasicMaterial({
-            color: 0xb392ff,
-            transparent: true,
-            opacity: 0.5
-        });
-
-        const ring1 = new THREE.Mesh(new THREE.TorusGeometry(size * 1.6, 0.012, 16, 100), ringMat);
+        const ring1 = new THREE.Mesh(
+            new THREE.TorusGeometry(size * 1.65, 0.014, 16, 100),
+            new THREE.MeshBasicMaterial({ color: 0xb392ff, transparent: true, opacity: 0.6 })
+        );
         ring1.rotation.x = Math.PI / 2.4;
         group.add(ring1);
 
-        const ring2 = new THREE.Mesh(new THREE.TorusGeometry(size * 1.85, 0.008, 16, 100), ringMat.clone());
-        ring2.material.color = new THREE.Color(0x7ee787);
+        const ring2 = new THREE.Mesh(
+            new THREE.TorusGeometry(size * 1.9, 0.01, 16, 100),
+            new THREE.MeshBasicMaterial({ color: 0x7ee787, transparent: true, opacity: 0.55 })
+        );
         ring2.rotation.x = -Math.PI / 3;
         ring2.rotation.y = Math.PI / 5;
         group.add(ring2);
 
-        // --- Частицы вокруг ---
         const pGeo = new THREE.BufferGeometry();
         const positions = new Float32Array(particlesCount * 3);
         const colors = new Float32Array(particlesCount * 3);
-        const palette = [0xf78166, 0x58a6ff, 0x7ee787, 0xb392ff];
-
+        const palette = [0xf78166, 0x58a6ff, 0x7ee787, 0xb392ff, 0x22d3ee];
         for (let i = 0; i < particlesCount; i++) {
-            const r = size * (2.2 + Math.random() * 1.8);
+            const r = size * (2.2 + Math.random() * 2);
             const theta = Math.random() * Math.PI * 2;
             const phi = Math.acos(2 * Math.random() - 1);
-
             positions[i * 3]     = r * Math.sin(phi) * Math.cos(theta);
             positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
             positions[i * 3 + 2] = r * Math.cos(phi);
-
             const c = new THREE.Color(palette[Math.floor(Math.random() * palette.length)]);
             colors[i * 3]     = c.r;
             colors[i * 3 + 1] = c.g;
             colors[i * 3 + 2] = c.b;
         }
-
         pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
         pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
         const pMat = new THREE.PointsMaterial({
-            size: 0.045,
-            vertexColors: true,
-            transparent: true,
-            opacity: 0.85,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
+            size: 0.05, vertexColors: true, transparent: true, opacity: 0.9,
+            blending: THREE.AdditiveBlending, depthWrite: false
         });
-
         const particles = new THREE.Points(pGeo, pMat);
         group.add(particles);
 
-        // --- Свет ---
-        const ambient = new THREE.AmbientLight(0xffffff, 0.5);
-        scene.add(ambient);
+        scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+        const l1 = new THREE.PointLight(0xf78166, 1.6, 20); l1.position.set(3, 3, 4); scene.add(l1);
+        const l2 = new THREE.PointLight(0x58a6ff, 1.3, 20); l2.position.set(-3, -2, 3); scene.add(l2);
+        const l3 = new THREE.PointLight(0xb392ff, 1.0, 20); l3.position.set(0, 4, -4); scene.add(l3);
 
-        const light1 = new THREE.PointLight(0xf78166, 1.4, 20);
-        light1.position.set(3, 3, 4);
-        scene.add(light1);
-
-        const light2 = new THREE.PointLight(0x58a6ff, 1.2, 20);
-        light2.position.set(-3, -2, 3);
-        scene.add(light2);
-
-        const light3 = new THREE.PointLight(0xb392ff, 0.9, 20);
-        light3.position.set(0, 4, -4);
-        scene.add(light3);
-
-        // --- Интерактивность (только для хедера) ---
-        let mouseX = 0, mouseY = 0, targetX = 0, targetY = 0;
-
+        let targetX = 0, targetY = 0;
         if (interactive && !reduceMotion) {
-            window.addEventListener('mousemove', (e) => {
-                mouseX = (e.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
-                targetX = mouseX * 0.5;
-                targetY = mouseY * 0.5;
+            window.addEventListener('mousemove', e => {
+                targetX = ((e.clientX / window.innerWidth) * 2 - 1) * 0.5;
+                targetY = (-(e.clientY / window.innerHeight) * 2 + 1) * 0.5;
             }, { passive: true });
         }
 
-        // --- Анимация ---
         const clock = new THREE.Clock();
         let rafId;
-
         function animate() {
             rafId = requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
-
             group.rotation.y = t * autoRotateSpeed * 0.6 + targetX;
             group.rotation.x = Math.sin(t * 0.4) * 0.15 + targetY;
-
             wire.rotation.y = -t * 0.4;
             wire.rotation.z = Math.sin(t * 0.3) * 0.2;
-
-            inner.rotation.y = t * 1.2;
-            inner.rotation.x = t * 0.8;
-            inner.scale.setScalar(1 + Math.sin(t * 2.5) * 0.08);
-
+            inner.rotation.y = t * 1.3;
+            inner.rotation.x = t * 0.85;
+            inner.scale.setScalar(1 + Math.sin(t * 2.5) * 0.1);
             ring1.rotation.z = t * 0.5;
             ring2.rotation.z = -t * 0.35;
-
             particles.rotation.y = t * 0.12;
             particles.rotation.x = t * 0.06;
-
-            const pulse = 0.18 + Math.sin(t * 2) * 0.08;
-            mat.emissiveIntensity = pulse;
-
+            mat.emissiveIntensity = 0.22 + Math.sin(t * 2) * 0.1;
             renderer.render(scene, camera);
         }
 
         resize();
         animate();
-
         window.addEventListener('resize', resize, { passive: true });
-
-        return {
-            dispose() {
-                cancelAnimationFrame(rafId);
-                renderer.dispose();
-                geo.dispose();
-                mat.dispose();
-                wireGeo.dispose();
-                wireMat.dispose();
-                innerGeo.dispose();
-                innerMat.dispose();
-                pGeo.dispose();
-                pMat.dispose();
-                ring1.geometry.dispose();
-                ring1.material.dispose();
-                ring2.geometry.dispose();
-                ring2.material.dispose();
-            }
-        };
+        return { dispose() { cancelAnimationFrame(rafId); renderer.dispose(); } };
     }
 
-    /* ============================================================
-       ПРЕЛОАДЕР + 3D
-       ============================================================ */
-    const preloader = document.querySelector('.preloader');
     const preloaderCanvas = document.getElementById('three-preloader');
-
     if (preloaderCanvas) {
-        createThreeScene(preloaderCanvas, {
-            size: 1,
-            particlesCount: 60,
-            autoRotateSpeed: 1.1,
-            interactive: false
-        });
+        createThreeScene(preloaderCanvas, { size: 1, particlesCount: 70, autoRotateSpeed: 1.1, interactive: false });
     }
 
-    setTimeout(() => {
-        preloader.classList.add('hide');
-        setTimeout(() => preloader.remove(), 800);
-    }, 1800);
-
-    /* ============================================================
-       3D В ХЕДЕРЕ
-       ============================================================ */
     const headerCanvas = document.getElementById('three-header');
     if (headerCanvas) {
-        createThreeScene(headerCanvas, {
-            size: 1.15,
-            particlesCount: 160,
-            autoRotateSpeed: 0.5,
-            interactive: true
-        });
+        createThreeScene(headerCanvas, { size: 1.15, particlesCount: 180, autoRotateSpeed: 0.5, interactive: true });
     }
 
+    const preloader = document.querySelector('.preloader');
+    setTimeout(() => {
+        preloader.classList.add('hide');
+        setTimeout(() => preloader.remove(), 1000);
+    }, 2100);
+
     /* ============================================================
-       ЧАСТИЦЫ
-       ============================================================ */
+       PARTICLES
+    ============================================================ */
     if (typeof particlesJS !== 'undefined') {
         particlesJS('particles-js', {
             particles: {
-                number: { value: 60, density: { enable: true, value_area: 900 } },
-                color: { value: ['#f78166', '#58a6ff', '#7ee787', '#b392ff', '#ff7eb6'] },
+                number: { value: isMobile ? 30 : 80, density: { enable: true, value_area: 900 } },
+                color: { value: ['#f78166', '#58a6ff', '#7ee787', '#b392ff', '#22d3ee', '#ff7eb6'] },
                 shape: { type: 'circle' },
-                opacity: { value: 0.4, random: true },
+                opacity: { value: 0.5, random: true },
                 size: { value: 2.4, random: true },
-                line_linked: {
-                    enable: true,
-                    distance: 150,
-                    color: '#f78166',
-                    opacity: 0.16,
-                    width: 1
-                },
-                move: {
-                    enable: true,
-                    speed: 1.4,
-                    direction: 'none',
-                    random: true,
-                    straight: false,
-                    out_mode: 'out',
-                    bounce: false
-                }
+                line_linked: { enable: true, distance: 150, color: '#f78166', opacity: 0.18, width: 1 },
+                move: { enable: true, speed: 1.4, direction: 'none', random: true, straight: false, out_mode: 'out', bounce: false }
             },
             interactivity: {
                 detect_on: 'canvas',
                 events: {
-                    onhover: { enable: true, mode: 'repulse' },
+                    onhover: { enable: !isMobile, mode: 'repulse' },
                     onclick: { enable: true, mode: 'push' }
                 }
             }
@@ -1707,15 +1945,27 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     /* ============================================================
-       ПЛАВНЫЙ СКРОЛЛ
-       ============================================================ */
+       SCROLL PROGRESS
+    ============================================================ */
+    const progress = document.getElementById('scroll-progress');
+    window.addEventListener('scroll', () => {
+        const h = document.documentElement.scrollHeight - window.innerHeight;
+        const p = h > 0 ? (window.scrollY / h) * 100 : 0;
+        progress.style.width = p + '%';
+    }, { passive: true });
+
+    /* ============================================================
+       SMOOTH SCROLL
+    ============================================================ */
     document.getElementById('scrollBtn').addEventListener('click', () => {
-        document.querySelector('.about-section').scrollIntoView({ behavior: 'smooth' });
+        const firstPortal = document.querySelector('.portal');
+        if (firstPortal) firstPortal.scrollIntoView({ behavior: 'smooth' });
+        else document.querySelector('.about-section').scrollIntoView({ behavior: 'smooth' });
     });
 
     /* ============================================================
-       ПОЯВЛЕНИЕ ПРИ СКРОЛЛЕ
-       ============================================================ */
+       REVEAL
+    ============================================================ */
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -1724,101 +1974,329 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
-
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
     /* ============================================================
-       ТАЙМЕР ДО 15 ОКТЯБРЯ 2026
-       ============================================================ */
+       COUNTDOWN
+    ============================================================ */
     const targetDate = new Date('2026-10-15T00:00:00').getTime();
     const cdDays = document.getElementById('cd-days');
     const cdHours = document.getElementById('cd-hours');
     const cdMinutes = document.getElementById('cd-minutes');
     const cdSeconds = document.getElementById('cd-seconds');
-
-    function pad(n) { return String(n).padStart(2, '0'); }
+    const pad = n => String(n).padStart(2, '0');
 
     function updateCountdown() {
         const diff = targetDate - Date.now();
-
         if (diff <= 0) {
-            cdDays.textContent = '00';
-            cdHours.textContent = '00';
-            cdMinutes.textContent = '00';
-            cdSeconds.textContent = '00';
+            cdDays.textContent = cdHours.textContent = cdMinutes.textContent = cdSeconds.textContent = '00';
             return;
         }
-
-        cdDays.textContent = pad(Math.floor(diff / 86400000));
-        cdHours.textContent = pad(Math.floor((diff % 86400000) / 3600000));
+        cdDays.textContent    = pad(Math.floor(diff / 86400000));
+        cdHours.textContent   = pad(Math.floor((diff % 86400000) / 3600000));
         cdMinutes.textContent = pad(Math.floor((diff % 3600000) / 60000));
         cdSeconds.textContent = pad(Math.floor((diff % 60000) / 1000));
     }
-
     updateCountdown();
     setInterval(updateCountdown, 1000);
 
     /* ============================================================
-       ПАРАЛЛАКС ХЕДЕРА (без наложений)
-       ============================================================ */
+       COUNT-UP STATS
+    ============================================================ */
+    function animateCount(el) {
+        const target = parseInt(el.dataset.count, 10);
+        const duration = 1500;
+        const start = performance.now();
+        function step(now) {
+            const t = Math.min((now - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - t, 3);
+            el.textContent = Math.floor(eased * target);
+            if (t < 1) requestAnimationFrame(step);
+            else el.textContent = target;
+        }
+        requestAnimationFrame(step);
+    }
+    const statsObs = new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+            if (e.isIntersecting) {
+                animateCount(e.target);
+                statsObs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-number').forEach(el => statsObs.observe(el));
+
+    /* ============================================================
+       HEADER PARALLAX
+    ============================================================ */
     const headerContent = document.querySelector('.header-content');
     const headerSection = document.querySelector('.header');
     let ticking = false;
 
     function onScroll() {
         if (!ticking) {
-            window.requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
                 if (!headerSection) { ticking = false; return; }
-
                 const scrollY = window.scrollY;
                 const headerHeight = headerSection.offsetHeight;
-
                 if (scrollY < headerHeight) {
-                    const progress = scrollY / headerHeight;
-                    headerContent.style.transform = `translate3d(0, ${scrollY * 0.22}px, 0)`;
-                    headerContent.style.opacity = String(1 - progress * 0.85);
+                    const p = scrollY / headerHeight;
+                    headerContent.style.transform = `translate3d(0, ${scrollY * 0.25}px, 0) scale(${1 - p * 0.05})`;
+                    headerContent.style.opacity = String(1 - p * 0.9);
                 } else {
                     headerContent.style.transform = '';
                     headerContent.style.opacity = '';
                 }
-
                 ticking = false;
             });
             ticking = true;
         }
     }
+    if (!reduceMotion) window.addEventListener('scroll', onScroll, { passive: true });
 
-    if (!reduceMotion) {
-        window.addEventListener('scroll', onScroll, { passive: true });
+    /* ============================================================
+       ★★★ ПОРТАЛЫ: генерация streak'ов + анимация при скролле
+    ============================================================ */
+    document.querySelectorAll('.portal').forEach(portal => {
+        const streaksContainer = portal.querySelector('[data-streaks]');
+        if (!streaksContainer) return;
+
+        // Генерируем 30 streak'ов (светящихся полосок)
+        const colors = ['#f78166', '#58a6ff', '#7ee787', '#b392ff', '#22d3ee', '#ff7eb6', '#ffd33d'];
+        const streaks = [];
+        for (let i = 0; i < 30; i++) {
+            const s = document.createElement('div');
+            s.className = 'streak';
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            s.style.background = `linear-gradient(90deg, transparent, ${color}, transparent)`;
+            s.style.boxShadow = `0 0 20px ${color}, 0 0 40px ${color}`;
+            // Случайная позиция по Y
+            s.style.top = (Math.random() * 100) + '%';
+            // Случайная длина
+            const w = 80 + Math.random() * 400;
+            s.style.width = w + 'px';
+            // Сохраняем данные для анимации
+            s.dataset.baseX = (Math.random() > 0.5 ? 1 : -1) * (100 + Math.random() * 500);
+            s.dataset.delay = Math.random();
+            s.dataset.speed = 0.7 + Math.random() * 0.6;
+            s.dataset.dir = Math.random() > 0.5 ? 1 : -1; // 1 = слева направо, -1 = справа налево
+            streaksContainer.appendChild(s);
+            streaks.push(s);
+        }
+        portal._streaks = streaks;
+    });
+
+    /* ============================================================
+       ★★★ АНИМАЦИЯ ПОРТАЛОВ ПРИ СКРОЛЛЕ
+    ============================================================ */
+    const portals = Array.from(document.querySelectorAll('.portal'));
+
+    function updatePortals() {
+        portals.forEach(portal => {
+            const rect = portal.getBoundingClientRect();
+            const windowH = window.innerHeight;
+            const portalH = portal.offsetHeight;
+
+            // Прогресс портала: 0 — только вошёл, 1 — полностью прошёл
+            // Считаем от момента когда верх портала достиг верха экрана
+            const scrolled = Math.max(0, -rect.top);
+            const total = portalH - windowH;
+            const progress = total > 0 ? Math.max(0, Math.min(1, scrolled / total)) : 0;
+
+            // Видимость портала (плавное появление/исчезновение по краям)
+            let visibility = 1;
+            if (rect.top > 0) visibility = Math.max(0, 1 - rect.top / windowH);
+            if (rect.bottom < windowH) visibility = Math.max(0, rect.bottom / windowH);
+
+            // ★ Главный эффект: прогресс делится на 3 фазы
+            //   0.00 - 0.25 — вход (портал раскрывается)
+            //   0.25 - 0.75 — кульминация (полосы летят вбок, текст исчезает)
+            //   0.75 - 1.00 — выход (портал закрывается, новый заголовок влетает)
+            let entranceProgress, peakProgress, exitProgress;
+            if (progress < 0.25) {
+                entranceProgress = progress / 0.25;
+                peakProgress = 0;
+                exitProgress = 0;
+            } else if (progress < 0.75) {
+                entranceProgress = 1;
+                peakProgress = (progress - 0.25) / 0.5;
+                exitProgress = 0;
+            } else {
+                entranceProgress = 1;
+                peakProgress = 1;
+                exitProgress = (progress - 0.75) / 0.25;
+            }
+
+            // ★ РИНГИ: раскрываются → крутятся → закрываются
+            const rings = portal.querySelectorAll('.portal-ring');
+            rings.forEach((ring, i) => {
+                const ringPhase = i / rings.length;
+                // Смещение фазы для волнового эффекта
+                const localPeak = Math.max(0, Math.min(1, (peakProgress - ringPhase * 0.3) / 0.7));
+                const localExit = Math.max(0, Math.min(1, (exitProgress - ringPhase * 0.2) / 0.8));
+
+                // Вход: scale от 0.3 до 1, opacity от 0 до 1
+                // Пик: scale 1 + пульсация, rotation
+                // Выход: scale до 2.5, opacity до 0
+
+                let scale = 0.3 + entranceProgress * 0.7;
+                let opacity = entranceProgress * 0.8;
+                let rotation = 0;
+
+                if (peakProgress > 0) {
+                    rotation = peakProgress * (360 * 1.5 + i * 90);
+                    scale = 1 + Math.sin(peakProgress * Math.PI) * 0.25 + peakProgress * 0.3;
+                    opacity = 0.8 + Math.sin(peakProgress * Math.PI) * 0.2;
+                }
+
+                if (exitProgress > 0) {
+                    rotation += exitProgress * 360;
+                    scale += exitProgress * 2.5;
+                    opacity *= (1 - exitProgress);
+                }
+
+                ring.style.transform = `translate(-50%, -50%) scale(${scale}) rotate(${rotation}deg)`;
+                ring.style.opacity = opacity * visibility;
+            });
+
+            // ★ STREAKS: летят вбок на пике
+            if (portal._streaks) {
+                portal._streaks.forEach((s, i) => {
+                    const dir = parseFloat(s.dataset.dir);
+                    const delay = parseFloat(s.dataset.delay);
+                    const speed = parseFloat(s.dataset.speed);
+                    const baseX = parseFloat(s.dataset.baseX);
+
+                    // Прогресс с учётом задержки
+                    const localProgress = Math.max(0, Math.min(1, (peakProgress - delay * 0.3) / 0.7));
+
+                    // X позиция: стартует за краем, летит через экран, уходит за другой край
+                    // На пике — активное движение, вне пика — почти скрыты
+                    let x, opacity;
+
+                    if (peakProgress < 0.05) {
+                        // До пика — streak'и на старте, скрыты
+                        x = -dir * window.innerWidth * 0.7;
+                        opacity = 0;
+                    } else if (exitProgress > 0) {
+                        // После пика — ушли
+                        x = dir * window.innerWidth * 1.2;
+                        opacity = Math.max(0, 0.7 * (1 - exitProgress * 1.5));
+                    } else {
+                        // На пике — летят
+                        x = -dir * window.innerWidth * 0.7 + dir * localProgress * window.innerWidth * 1.9 * speed;
+                        // Видимость внутри пика
+                        const centerDist = Math.abs(localProgress - 0.5);
+                        opacity = Math.max(0, 1 - centerDist * 2.2) * 0.9;
+                    }
+
+                    s.style.transform = `translateX(${x}px)`;
+                    s.style.opacity = opacity * visibility;
+                });
+            }
+
+            // ★ FLASH: вспышка на пике
+            const flash = portal.querySelector('.portal-flash');
+            if (flash) {
+                const flashIntensity = Math.sin(peakProgress * Math.PI);
+                const scale = 0.5 + peakProgress * 2;
+                flash.style.opacity = flashIntensity * 0.9 * visibility;
+                flash.style.transform = `translate(-50%, -50%) scale(${scale})`;
+            }
+
+            // ★ PORTAL-TEXT: исчезает в середине пика
+            const portalText = portal.querySelector('.portal-text');
+            if (portalText) {
+                // Появляется на входе, исчезает в пике
+                let textOpacity, textScale, textBlur;
+                if (peakProgress < 0.5) {
+                    textOpacity = entranceProgress * (1 - peakProgress * 2);
+                    textScale = 1 - peakProgress * 0.4;
+                    textBlur = peakProgress * 12;
+                } else {
+                    textOpacity = 0;
+                    textScale = 0.6;
+                    textBlur = 12;
+                }
+                portalText.style.opacity = Math.max(0, textOpacity) * visibility;
+                portalText.style.transform = `translate(-50%, -50%) scale(${textScale})`;
+                portalText.style.filter = `blur(${textBlur}px)`;
+            }
+
+            // ★ PORTAL-INCOMING: влетает сбоку ближе к выходу
+            const incoming = portal.querySelector('.portal-incoming');
+            if (incoming) {
+                // Появляется ближе к концу пика и на выходе
+                let inX, inOpacity, inBlur;
+                if (peakProgress < 0.4) {
+                    // Ещё не появился или только начинает
+                    inX = window.innerWidth * 1.2;
+                    inOpacity = 0;
+                    inBlur = 20;
+                } else if (peakProgress < 0.75 && exitProgress < 0.5) {
+                    // Влетает
+                    const localIn = (peakProgress - 0.4) / 0.35;
+                    inX = window.innerWidth * 1.2 * (1 - localIn);
+                    inOpacity = localIn;
+                    inBlur = 20 * (1 - localIn);
+                } else {
+                    // Уже в центре, слегка уменьшается к концу
+                    const localOut = exitProgress;
+                    inX = 0;
+                    inOpacity = 1 - localOut * 0.5;
+                    inBlur = localOut * 8;
+                }
+                incoming.style.opacity = inOpacity * visibility;
+                incoming.style.transform = `translate(calc(-50% + ${inX}px), -50%)`;
+                incoming.style.filter = `blur(${inBlur}px)`;
+            }
+
+            // ★ CURTAIN: затемнение по краям на пике
+            const curtains = portal.querySelectorAll('.portal-curtain');
+            curtains.forEach(c => {
+                const curtainOpacity = Math.sin(peakProgress * Math.PI) * 0.6;
+                c.style.opacity = curtainOpacity * visibility;
+            });
+        });
+    }
+
+    if (!isMobile && !reduceMotion) {
+        window.addEventListener('scroll', updatePortals, { passive: true });
+        window.addEventListener('resize', updatePortals, { passive: true });
+        updatePortals();
+    } else {
+        // На мобилке просто показываем порталы статично
+        portals.forEach(p => {
+            p.querySelectorAll('.portal-ring').forEach(r => r.style.opacity = '0.4');
+            p.querySelector('.portal-text').style.opacity = '1';
+            p.querySelector('.portal-text').style.transform = 'translate(-50%, -50%)';
+            p.querySelector('.portal-incoming').style.opacity = '0';
+        });
     }
 
     /* ============================================================
-       ПОДСВЕТКА КАРТОЧЕК
-       ============================================================ */
-    const cardColors = ['#f78166', '#58a6ff', '#7ee787', '#b392ff', '#ffd33d', '#79c0ff', '#ff7eb6'];
+       ★ FIX: TILT БОЛЬШЕ НЕ СМЕЩАЕТ КАРТОЧКУ
+       Убираем tilt вообще — оставляем только flip.
+       Это гарантирует, что карточка не съедет.
+    ============================================================ */
 
+    /* ============================================================
+       CARD COLOR GLOW
+    ============================================================ */
     document.querySelectorAll('.participant-card').forEach(card => {
-        const id = parseInt(card.dataset.id || '1', 10);
-        const color = cardColors[(id - 1) % cardColors.length];
+        const color = card.dataset.color || '#f78166';
+        const glow = card.querySelector('.card-glow');
+        const front = card.querySelector('.card-front');
 
         card.addEventListener('mouseenter', () => {
-            const glow = card.querySelector('.card-glow');
-            if (glow) {
-                glow.style.background = `radial-gradient(circle at center, ${color}22 0%, transparent 70%)`;
-            }
-            const front = card.querySelector('.card-front');
+            if (glow) glow.style.background = `radial-gradient(circle at center, ${color}30 0%, transparent 70%)`;
             if (front) {
-                front.style.borderColor = color + '88';
-                front.style.boxShadow = `0 0 32px ${color}44`;
+                front.style.borderColor = color + '99';
+                front.style.boxShadow = `0 0 44px ${color}66, inset 0 0 30px ${color}11`;
             }
         });
-
         card.addEventListener('mouseleave', () => {
-            const glow = card.querySelector('.card-glow');
-            if (glow) {
-                glow.style.background = 'radial-gradient(circle at center, rgba(247, 129, 102, 0.12), transparent 70%)';
-            }
-            const front = card.querySelector('.card-front');
+            if (glow) glow.style.background = 'radial-gradient(circle at center, rgba(247, 129, 102, 0.14), transparent 70%)';
             if (front) {
                 front.style.borderColor = '';
                 front.style.boxShadow = '';
@@ -1827,10 +2305,126 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     /* ============================================================
-       ПРИВЕТСТВИЕ В КОНСОЛИ
-       ============================================================ */
-    console.log('%c🎮 Nice Game Challenge 2026', 'color:#f78166;font-size:18px;font-weight:bold;');
+       MAGNETIC BUTTONS
+    ============================================================ */
+    if (!isMobile && !reduceMotion) {
+        document.querySelectorAll('.magnetic').forEach(el => {
+            el.addEventListener('mousemove', e => {
+                const rect = el.getBoundingClientRect();
+                const x = e.clientX - rect.left - rect.width / 2;
+                const y = e.clientY - rect.top - rect.height / 2;
+                el.style.transform = `translate(${x * 0.12}px, ${y * 0.12}px)`;
+            });
+            el.addEventListener('mouseleave', () => {
+                el.style.transform = '';
+            });
+        });
+    }
+
+    /* ============================================================
+       FPS COUNTER
+    ============================================================ 
+    const fpsEl = document.createElement('div');
+    fpsEl.style.cssText = `
+        position: fixed;
+        bottom: 16px; right: 16px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.7rem;
+        color: #7ee787;
+        background: rgba(0, 0, 0, 0.6);
+        padding: 6px 12px;
+        border-radius: 8px;
+        border: 1px solid rgba(126, 231, 135, 0.3);
+        z-index: 9998;
+        backdrop-filter: blur(10px);
+        letter-spacing: 1px;
+        pointer-events: none;
+        user-select: none;
+    `;
+    fpsEl.textContent = 'FPS: --';
+    document.body.appendChild(fpsEl);
+
+    let lastTime = performance.now();
+    let frames = 0;
+    function fpsLoop() {
+        frames++;
+        const now = performance.now();
+        if (now - lastTime >= 1000) {
+            fpsEl.textContent = `FPS: ${frames}`;
+            if (frames >= 55) fpsEl.style.color = '#7ee787';
+            else if (frames >= 30) fpsEl.style.color = '#ffd33d';
+            else fpsEl.style.color = '#f78166';
+            frames = 0;
+            lastTime = now;
+        }
+        requestAnimationFrame(fpsLoop);
+    }
+    fpsLoop();*/
+
+    /* ============================================================
+       KONAMI CODE
+    ============================================================ */
+    const konamiCode = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let konamiIdx = 0;
+    document.addEventListener('keydown', e => {
+        if (e.key === konamiCode[konamiIdx] || e.key.toLowerCase() === konamiCode[konamiIdx]) {
+            konamiIdx++;
+            if (konamiIdx === konamiCode.length) {
+                konamiIdx = 0;
+                activateKonami();
+            }
+        } else {
+            konamiIdx = 0;
+        }
+    });
+
+    function activateKonami() {
+        console.log('%c🎮 KONAMI CODE ACTIVATED!', 'color:#ffd33d;font-size:24px;font-weight:bold;');
+        let hue = 0;
+        const interval = setInterval(() => {
+            hue = (hue + 30) % 360;
+            document.body.style.filter = `hue-rotate(${hue}deg) saturate(2)`;
+        }, 100);
+        setTimeout(() => {
+            clearInterval(interval);
+            document.body.style.filter = '';
+        }, 3000);
+
+        const msg = document.createElement('div');
+        msg.textContent = '🎮 KONAMI CODE! +100 TOP COINS';
+        msg.style.cssText = `
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem; font-weight: 900;
+            color: #ffd33d;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px 60px;
+            border-radius: 20px;
+            border: 2px solid #ffd33d;
+            box-shadow: 0 0 60px #ffd33d, 0 0 120px #ffd33d;
+            z-index: 99999;
+            text-shadow: 0 0 30px #ffd33d;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            pointer-events: none;
+        `;
+        document.body.appendChild(msg);
+        requestAnimationFrame(() => {
+            msg.style.transform = 'translate(-50%, -50%) scale(1)';
+        });
+        setTimeout(() => {
+            msg.style.transform = 'translate(-50%, -50%) scale(0)';
+            setTimeout(() => msg.remove(), 600);
+        }, 2500);
+    }
+
+    /* ============================================================
+       CONSOLE
+    ============================================================ */
+    console.log('%c🎮 NICE GAME CHALLENGE 2026', 'color:#f78166;font-size:22px;font-weight:bold;text-shadow:0 0 20px #f78166;');
     console.log('%c👨‍💻 Удачи в создании крутых игр!', 'color:#58a6ff;font-size:14px;');
+    console.log('%c💡 Konami Code: ↑↑↓↓←→←→BA', 'color:#ffd33d;font-size:13px;');
 });
 </script>
 </body>
