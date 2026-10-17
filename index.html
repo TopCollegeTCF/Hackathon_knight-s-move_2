@@ -1684,14 +1684,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const isMobile = window.matchMedia('(max-width: 992px)').matches;
 
     /* ============================================================
-       PARTICIPANTS DATA
+       PARTICIPANTS DATA  https://github.com/pushartema-afk/kontra
     ============================================================ */
     const participants = [
         { id: 1, name: 'Александр', role: 'Chat GPT Эксплуататор',    skills: ['JS', 'Git', 'Logic'],    bio: 'Этот участник заходит на хакатон с фразой «я всё сделаю за ночь» — и правда делает. В его репозитории половина проектов начинается с коммита «it works on my machine», но к дедлайну всё действительно работает. Любит горячие клавиши, ненавидит лишние клики и знает три способа сделать одно и то же — и использует все сразу, чтобы было интереснее.', seed: 'Nice1', color: '0d1117', gh: 'https://github.com/negrnaxui/deadline' },
         { id: 2, name: 'Дементий', role: 'Cloud Coder',   skills: ['JS', 'Physics', 'Math'], bio: 'Для него отступы — это вопрос эстетики, а не сетки. Может спорить о толщине рамки, но когда дело доходит до кликабельной кнопки — она появляется первой. На хакатоне он тот, кто спасает проект от «страшного интерфейса» и добавляет анимации даже туда, где их не просили.', seed: 'Nice2', color: '161b22', gh: 'https://github.com/Demka-demo/dark-fantasy' },
         { id: 3, name: 'Даниил', role: 'UI/UX',         skills: ['CSS', 'Figma', 'Anim'], bio: 'Не стесняется искать решения, зато умеет адаптировать чужой код под задачу. Знает, где на Stack Overflow искать ответ по первой строчке ошибки, и всегда приносит в команду «тот самый пакет, который всё починит». Его суперсила — превратить «у меня не работает» в «теперь работает»', seed: 'Nice3', color: '0d47a1', gh: 'https://github.com/misterminion3310/time-keeper' },
         { id: 4, name: 'Матвей', role: 'Frontend',      skills: ['HTML', 'CSS', 'JS'],    bio: 'Любит нажимать на всё подряд и специально вводить странные данные. Его любимое слово — «воспроизводится». На хакатоне именно он замечает, что кнопка ломается, если экран чуть-чуть уменьшить, и что форма не отправляет данные при скорости интернета 3G. Без него проект выглядел бы идеально… ровно до первого реального пользователя.', seed: 'Nice4', color: '1a73e8', gh: 'https://github.com/syph0rnal/GSPLaucher' },
-        { id: 5, name: 'Имя 5', role: 'Backend/Logic', skills: ['JS', 'API', 'Data'],    bio: 'Логика данных, сохранения, интеграции.', seed: 'Nice5', color: '238636', gh: 'https://github.com/' },
+        { id: 5, name: 'Артем', role: 'Backend/Logic', skills: ['JS', 'API', 'Data'],    bio: 'Логика данных, сохранения, интеграции.', seed: 'Nice5', color: '238636', gh: 'https://github.com/pushartema-afk/kontra' },
         { id: 6, name: 'Имя 6', role: 'QA / Balance',  skills: ['Testing', 'Balance'],   bio: 'Тестирует, находит баги и помогает с балансом.', seed: 'Nice6', color: 'f78166', gh: 'https://github.com/' },
         { id: 7, name: 'Имя 7', role: 'Art / Sound',   skills: ['Art', 'Sound', 'FX'],   bio: 'Отвечает за графику, спрайты и звуковое сопровождение.', seed: 'Nice7', color: '7ee787', gh: 'https://github.com/' }
     ];
